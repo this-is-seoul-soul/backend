@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: local
+  web:
+    resources:
+      static-locations: classpath:/dist/
+      add-mappings: "false"
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+        format_sql: true
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: "true"
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  devtools:
+    livereload:
+      enabled: "true"
+logging:
+  level:
+    org:
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+      org.springframework.boot: DEBUG
+      org.springframework.security: DEBUG
+      org.springframework.web: DEBUG
+      apache:
+        tiles: INFO
+    root: INFO
+    com.auth: DEBUG
+server:
+  port: 8201
