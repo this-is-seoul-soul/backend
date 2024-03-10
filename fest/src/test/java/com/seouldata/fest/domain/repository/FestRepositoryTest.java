@@ -1,6 +1,7 @@
 package com.seouldata.fest.domain.repository;
 
-import com.seouldata.fest.domain.entity.Fest;
+import com.seouldata.fest.domain.fest.entity.Fest;
+import com.seouldata.fest.domain.fest.repository.FestRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

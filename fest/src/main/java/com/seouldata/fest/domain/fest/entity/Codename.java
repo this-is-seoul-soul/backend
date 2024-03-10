@@ -1,4 +1,4 @@
-package com.seouldata.fest.domain.entity;
+package com.seouldata.fest.domain.fest.entity;
 
 public enum Codename {
 
