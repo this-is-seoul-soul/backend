@@ -27,8 +27,15 @@ public enum Codename {
         this.codeNum = codeNum;
     }
 
-    public int getCodeNum() {
-        return codeNum;
+    public static int getCodeNum(String codeType) {
+
+        for (Codename codename : Codename.values()) {
+            if (codename.codeType.equals(codeType)) {
+                return codename.codeNum;
+            }
+        }
+
+        return -1;
     }
 
 }
