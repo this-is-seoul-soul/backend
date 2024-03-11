@@ -2,7 +2,6 @@ package com.seouldata.fest.domain.fest.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +13,7 @@ public class GetFestResDto {
 
     private CulturalEventInfo culturalEventInfo;
 
-    @Data
+    @Getter
     @RequiredArgsConstructor
     public static class CulturalEventInfo {
 
@@ -25,7 +24,7 @@ public class GetFestResDto {
 
     }
 
-    @Data
+    @Getter
     public static class Row {
 
         @JsonProperty("CODENAME")
