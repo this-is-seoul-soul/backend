@@ -1,6 +1,7 @@
 package com.seouldata.fest.domain.repository;
 
-import com.seouldata.fest.domain.entity.Fest;
+import com.seouldata.fest.domain.fest.entity.Fest;
+import com.seouldata.fest.domain.fest.repository.FestRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +23,7 @@ public class FestRepositoryTest {
                 .guname("종로구")
                 .place("세종대극장")
                 .useTrgt("7세 이상 관람 가능(2017년생부터 관람 가능)")
-                .isFree('Y')
+                .isFree("유료")
                 .useFee("SUITE석 140,000원 / VIP석 120,000원 / R석 100,000원 / S석 80,000원 / A석 50,000원 / B석 30,000원")
                 .startDate(LocalDateTime.of(2024, 1, 29, 0, 0))
                 .endDate(LocalDateTime.of(2024, 1, 29, 0, 0))
