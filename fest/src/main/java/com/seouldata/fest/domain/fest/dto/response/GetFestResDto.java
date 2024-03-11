@@ -3,12 +3,13 @@ package com.seouldata.fest.domain.fest.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
 public class GetFestResDto {
 
     private CulturalEventInfo culturalEventInfo;
