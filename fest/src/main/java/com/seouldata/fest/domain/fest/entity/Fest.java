@@ -1,4 +1,4 @@
-package com.seouldata.fest.domain.entity;
+package com.seouldata.fest.domain.fest.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -42,7 +42,7 @@ public class Fest {
     private String useTrgt;
 
     @Column(name = "is_free", length = 2)
-    private char isFree;
+    private String isFree;
 
     @Column(name = "use_fee", length = 270)
     @NotNull
@@ -73,7 +73,7 @@ public class Fest {
     private boolean isDeleted;
 
     @Builder
-    public Fest(String title, int codename, String guname, String place, String useTrgt, char isFree, String useFee, LocalDateTime startDate, LocalDateTime endDate, double lot, double lat, String orgLink, String mainImg, boolean isDeleted) {
+    public Fest(String title, int codename, String guname, String place, String useTrgt, String isFree, String useFee, LocalDateTime startDate, LocalDateTime endDate, double lot, double lat, String orgLink, String mainImg, boolean isDeleted) {
         this.title = title;
         this.codename = codename;
         this.guname = guname;
