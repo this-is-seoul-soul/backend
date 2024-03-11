@@ -60,10 +60,10 @@ public class GetFestResDto {
         private LocalDateTime endDate;
 
         @JsonProperty("LOT")
-        private double lot;
+        private String lot;
 
         @JsonProperty("LAT")
-        private double lat;
+        private String lat;
 
         @JsonProperty("IS_FREE")
         private String IS_FREE;
