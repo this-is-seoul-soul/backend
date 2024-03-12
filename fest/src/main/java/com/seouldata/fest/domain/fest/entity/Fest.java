@@ -15,6 +15,7 @@ public class Fest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "fest_seq")
     private Long festSeq;
 
     @Column(length = 100)
