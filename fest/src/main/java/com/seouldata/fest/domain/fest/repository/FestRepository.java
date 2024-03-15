@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FestRepository extends JpaRepository<Fest, Long> {
 
+    int countAllByIsPublic(boolean isPublic);
+
 }
