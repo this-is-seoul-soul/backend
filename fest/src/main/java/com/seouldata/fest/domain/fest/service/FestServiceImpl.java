@@ -25,7 +25,7 @@ public class FestServiceImpl implements FestService {
     @Scheduled(cron = "00 00 21 * * ?", zone = "Asia/Seoul")
     public void getFestData() {
 
-        long firstFestIdx = festRepository.count() + 1;
+        long firstFestIdx = festRepository.countAllByIsPublic(true) + 1;
         int lastFestIdx = openApiFeignClient.getFestCnt().getCulturalEventInfo().getListTotalCount();
 
         if(firstFestIdx >= lastFestIdx)
@@ -73,6 +73,7 @@ public class FestServiceImpl implements FestService {
                                 .lat(lat)
                                 .orgLink(row.getOrgLink())
                                 .mainImg(row.getMainImg())
+                                .isPublic(true)
                                 .build()
                 );
 
