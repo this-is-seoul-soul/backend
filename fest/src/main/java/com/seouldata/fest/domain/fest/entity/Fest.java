@@ -73,8 +73,12 @@ public class Fest {
     @ColumnDefault("0")
     private boolean isDeleted;
 
+    @Column(name = "is_public", nullable = false, columnDefinition = "tinyint(1)")
+    @ColumnDefault("0")
+    private boolean isPublic;
+
     @Builder
-    public Fest(String title, int codename, String guname, String place, String useTrgt, String isFree, String useFee, LocalDateTime startDate, LocalDateTime endDate, double lot, double lat, String orgLink, String mainImg, boolean isDeleted) {
+    public Fest(String title, int codename, String guname, String place, String useTrgt, String isFree, String useFee, LocalDateTime startDate, LocalDateTime endDate, double lot, double lat, String orgLink, String mainImg, boolean isDeleted, boolean isPublic) {
         this.title = title;
         this.codename = codename;
         this.guname = guname;
@@ -89,6 +93,7 @@ public class Fest {
         this.orgLink = orgLink;
         this.mainImg = mainImg;
         this.isDeleted = isDeleted;
+        this.isPublic = isPublic;
     }
 
 }
