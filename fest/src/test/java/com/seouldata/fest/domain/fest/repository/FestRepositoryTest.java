@@ -1,4 +1,4 @@
-package com.seouldata.fest.domain.repository;
+package com.seouldata.fest.domain.fest.repository;
 
 import com.seouldata.fest.domain.fest.entity.*;
 import com.seouldata.fest.domain.fest.repository.*;
