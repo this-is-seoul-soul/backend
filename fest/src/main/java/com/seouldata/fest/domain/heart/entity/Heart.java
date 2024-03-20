@@ -1,5 +1,6 @@
-package com.seouldata.fest.domain.fest.entity;
+package com.seouldata.fest.domain.heart.entity;
 
+import com.seouldata.fest.domain.fest.entity.Fest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

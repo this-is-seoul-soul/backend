@@ -1,12 +1,12 @@
-package com.seouldata.fest.domain.fest.service;
+package com.seouldata.fest.domain.review.service;
 
 import com.seouldata.common.exception.BusinessException;
 import com.seouldata.common.exception.ErrorCode;
-import com.seouldata.fest.domain.fest.dto.resquest.AddReviewReq;
+import com.seouldata.fest.domain.review.dto.request.AddReviewReq;
 import com.seouldata.fest.domain.fest.entity.Fest;
-import com.seouldata.fest.domain.fest.entity.Review;
+import com.seouldata.fest.domain.review.entity.Review;
 import com.seouldata.fest.domain.fest.repository.FestRepository;
-import com.seouldata.fest.domain.fest.repository.ReviewRepository;
+import com.seouldata.fest.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

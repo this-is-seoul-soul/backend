@@ -1,4 +1,4 @@
-package com.seouldata.fest.domain.fest.dto.resquest;
+package com.seouldata.fest.domain.review.dto.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
