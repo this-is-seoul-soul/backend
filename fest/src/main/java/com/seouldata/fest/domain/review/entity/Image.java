@@ -1,4 +1,4 @@
-package com.seouldata.fest.domain.fest.entity;
+package com.seouldata.fest.domain.review.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

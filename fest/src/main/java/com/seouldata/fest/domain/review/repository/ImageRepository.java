@@ -1,6 +1,6 @@
-package com.seouldata.fest.domain.fest.repository;
+package com.seouldata.fest.domain.review.repository;
 
-import com.seouldata.fest.domain.fest.entity.Image;
+import com.seouldata.fest.domain.review.entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
