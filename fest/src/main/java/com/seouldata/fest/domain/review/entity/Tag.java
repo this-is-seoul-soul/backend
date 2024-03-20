@@ -1,7 +1,6 @@
-package com.seouldata.fest.domain.fest.entity;
+package com.seouldata.fest.domain.review.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,32 +9,27 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@Table(name = "review")
+@Table(name = "tag")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Review {
+public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_seq")
-    private Long reviewSeq;
+    @Column(name = "tag_seq")
+    private Long tagSeq;
 
     @Column(name = "mem_seq")
     @NotNull
     private Long memSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fest_seq", nullable = false)
-    private Fest fest;
+    @JoinColumn(name = "review_seq", nullable = false)
+    private Review review;
 
-    @Column(columnDefinition = "smallint(6)")
+    @Column(name = "tag_no", columnDefinition = "tinyint(4)")
     @NotNull
-    @Max(5)
-    private int point;
-
-    @Column(length = 150)
-    @NotNull
-    private String content;
+    private int tagNo;
 
     @Column(name = "is_deleted", columnDefinition = "tinyint(1)")
     @NotNull
@@ -43,11 +37,10 @@ public class Review {
     private boolean isDeleted;
 
     @Builder
-    public Review(Long memSeq, Fest fest, int point, String content, boolean isDeleted) {
+    public Tag(Long memSeq, Review review, int tagNo, boolean isDeleted) {
         this.memSeq = memSeq;
-        this.fest = fest;
-        this.point = point;
-        this.content = content;
+        this.review = review;
+        this.tagNo = tagNo;
         this.isDeleted = isDeleted;
     }
 

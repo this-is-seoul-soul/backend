@@ -1,6 +1,6 @@
-package com.seouldata.fest.domain.fest.repository;
+package com.seouldata.fest.domain.heart.repository;
 
-import com.seouldata.fest.domain.fest.entity.Heart;
+import com.seouldata.fest.domain.heart.entity.Heart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
