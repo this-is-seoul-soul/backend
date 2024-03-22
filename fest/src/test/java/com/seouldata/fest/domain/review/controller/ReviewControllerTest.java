@@ -1,6 +1,7 @@
 package com.seouldata.fest.domain.review.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seouldata.fest.domain.review.ReviewController;
 import com.seouldata.fest.domain.review.dto.request.AddReviewReq;
 import com.seouldata.fest.domain.review.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
