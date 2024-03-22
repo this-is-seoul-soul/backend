@@ -1,6 +1,7 @@
 package com.seouldata.fest.domain.review.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seouldata.fest.domain.review.ReviewController;
 import com.seouldata.fest.domain.review.dto.request.AddReviewReq;
 import com.seouldata.fest.domain.review.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,14 +77,14 @@ class ReviewControllerTest {
         @Test
         @DisplayName("invalid point under range")
         void addReview_point_under() throws Exception {
-            AddReviewReq addReviewReq = new AddReviewReq("정말 좋음", -1, List.of(""), List.of(3), 6L);
+            addReviewReq = new AddReviewReq("정말 좋음", -1, List.of(""), List.of(3), 6L);
             perform();
         }
 
         @Test
         @DisplayName("invalid point over range")
         void addReview_point_over() throws Exception {
-            AddReviewReq addReviewReq = new AddReviewReq("정말 좋음", 6, List.of(""), List.of(3), 6L);
+            addReviewReq = new AddReviewReq("정말 좋음", 6, List.of(""), List.of(3), 6L);
             perform();
         }
 
