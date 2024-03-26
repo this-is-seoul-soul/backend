@@ -1,7 +1,8 @@
-package com.seouldata.fest.domain.review;
+package com.seouldata.fest.domain.review.controller;
 
 import com.seouldata.common.response.EnvelopResponse;
 import com.seouldata.fest.domain.review.dto.request.AddReviewReq;
+import com.seouldata.fest.domain.review.dto.request.ModifyReviewReq;
 import com.seouldata.fest.domain.review.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,15 @@ public class ReviewController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(EnvelopResponse.builder().code(HttpStatus.CREATED.value()).build());
+    }
+
+    @PatchMapping
+    public ResponseEntity<EnvelopResponse> modifyReview(@RequestHeader("memSeq") Long memSeq, @RequestBody @Valid ModifyReviewReq modifyReviewReq) {
+
+        reviewService.modifyReview(memSeq, modifyReviewReq);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
 }
