@@ -33,13 +33,33 @@ public class ReviewServiceImpl implements ReviewService {
         Fest foundFest = festRepository.findByFestSeq(addReviewReq.getFestSeq())
                 .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
 
-        return reviewRepository.save(Review.builder()
-                .memSeq(memSeq)
-                .fest(foundFest)
-                .point(addReviewReq.getPoint())
-                .content(addReviewReq.getContent())
-                .build())
-                .getReviewSeq();
+        Review review = reviewRepository.save(Review.builder()
+                        .memSeq(memSeq)
+                        .fest(foundFest)
+                        .point(addReviewReq.getPoint())
+                        .content(addReviewReq.getContent())
+                        .build());
+
+        if (addReviewReq.getImgUrl() != null) {
+            addReviewReq.getImgUrl().stream()
+                    .map(image -> Image.builder()
+                            .review(review)
+                            .imgUrl(image)
+                            .build())
+                    .forEach(imageRepository::save);
+        }
+
+        if (addReviewReq.getTag() != null) {
+            addReviewReq.getTag().stream()
+                    .map(tag -> Tag.builder()
+                            .memSeq(memSeq)
+                            .review(review)
+                            .tagNo(tag)
+                            .build())
+                    .forEach(tagRepository::save);
+        }
+
+        return review.getReviewSeq();
     }
 
     @Override
