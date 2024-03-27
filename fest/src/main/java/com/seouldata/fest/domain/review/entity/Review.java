@@ -52,4 +52,9 @@ public class Review {
         this.isDeleted = isDeleted;
     }
 
+    public void modify(String content, int point) {
+        this.content = content;
+        this.point = point;
+    }
+
 }
