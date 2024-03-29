@@ -1,6 +1,7 @@
 package com.seouldata.fest.domain.fest.service;
 
 import com.seouldata.fest.domain.fest.client.OpenApiFeignClient;
+import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
 import com.seouldata.fest.domain.fest.dto.response.GetFestResDto;
 import com.seouldata.fest.domain.fest.entity.Codename;
 import com.seouldata.fest.domain.fest.entity.Fest;
@@ -22,7 +23,7 @@ public class FestServiceImpl implements FestService {
     private final FestRepository festRepository;
 
     @Override
-    @Scheduled(cron = "00 00 21 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "00 17 19 * * ?", zone = "Asia/Seoul")
     public void getFestData() {
 
         long firstFestIdx = festRepository.countAllByIsPublic(true) + 1;
@@ -80,6 +81,31 @@ public class FestServiceImpl implements FestService {
             }
 
         }
+
+    }
+
+    @Override
+    public void addFest(Long memSeq, AddFestReq addFestReq) {
+
+        festRepository.save(
+                Fest.builder()
+                        .title(addFestReq.getTitle())
+                        .codename(Codename.getCodeNum(addFestReq.getCodeName()))
+                        .guname(addFestReq.getGuName())
+                        .place(addFestReq.getPlace())
+                        .useTrgt(addFestReq.getUseTrgt())
+                        .isFree(addFestReq.getIsFree())
+                        .useFee(addFestReq.getUseFee())
+                        .startDate(addFestReq.getStartDate().atStartOfDay())
+                        .endDate(addFestReq.getEndDate().atStartOfDay())
+                        .lot(addFestReq.getLot())
+                        .lat(addFestReq.getLat())
+                        .orgLink(addFestReq.getOrgLink())
+                        .mainImg(addFestReq.getMainImg())
+                        .isPublic(false)
+                        .creator(memSeq.intValue())
+                        .build()
+        );
 
     }
 
