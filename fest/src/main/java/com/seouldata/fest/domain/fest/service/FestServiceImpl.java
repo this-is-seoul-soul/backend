@@ -23,7 +23,7 @@ public class FestServiceImpl implements FestService {
     private final FestRepository festRepository;
 
     @Override
-    @Scheduled(cron = "00 17 19 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "00 00 21 * * ?", zone = "Asia/Seoul")
     public void getFestData() {
 
         long firstFestIdx = festRepository.countAllByIsPublic(true) + 1;
@@ -103,7 +103,7 @@ public class FestServiceImpl implements FestService {
                         .orgLink(addFestReq.getOrgLink())
                         .mainImg(addFestReq.getMainImg())
                         .isPublic(false)
-                        .creator(memSeq.intValue())
+                        .creator(memSeq)
                         .build()
         );
 

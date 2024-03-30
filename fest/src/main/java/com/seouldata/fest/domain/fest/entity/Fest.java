@@ -78,10 +78,10 @@ public class Fest {
     private boolean isPublic;
 
     @Column(name = "creator")
-    private int creator;
+    private Long creator;
 
     @Builder
-    public Fest(String title, int codename, String guname, String place, String useTrgt, String isFree, String useFee, LocalDateTime startDate, LocalDateTime endDate, double lot, double lat, String orgLink, String mainImg, boolean isDeleted, boolean isPublic, int creator) {
+    public Fest(String title, int codename, String guname, String place, String useTrgt, String isFree, String useFee, LocalDateTime startDate, LocalDateTime endDate, double lot, double lat, String orgLink, String mainImg, boolean isDeleted, boolean isPublic, Long creator) {
         this.title = title;
         this.codename = codename;
         this.guname = guname;
