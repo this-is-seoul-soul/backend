@@ -2,6 +2,7 @@ package com.seouldata.fest.domain.fest.controller;
 
 import com.seouldata.common.response.EnvelopResponse;
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
+import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
 import com.seouldata.fest.domain.fest.service.FestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,15 @@ public class FestController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(EnvelopResponse.builder().code(HttpStatus.CREATED.value()).build());
+    }
+
+    @PutMapping
+    public ResponseEntity<EnvelopResponse> modifyFest(@RequestHeader("memSeq") Long memSeq, @RequestBody @Valid ModifyFestReq modifyFestReq) {
+
+        festService.updateFest(memSeq, modifyFestReq);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
 }

@@ -100,4 +100,20 @@ public class Fest {
         this.creator = creator;
     }
 
+    public void modify(String title, int codename, String guname, String place, String useTrgt, String isFree, String useFee, LocalDateTime startDate, LocalDateTime endDate, double lot, double lat, String orgLink, String mainImg) {
+        this.title = title;
+        this.codename = codename;
+        this.guname = guname;
+        this.place = place;
+        this.useTrgt = useTrgt;
+        this.isFree = isFree;
+        this.useFee = useFee;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.lot = lot;
+        this.lat = lat;
+        this.orgLink = orgLink;
+        this.mainImg = mainImg;
+    }
+
 }
