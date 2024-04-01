@@ -9,4 +9,6 @@ public interface ReviewService {
 
     void modifyReview(Long memSeq, ModifyReviewReq modifyReviewReq);
 
+    void removeReview(Long memSeq, Long reviewSeq);
+
 }

@@ -39,4 +39,8 @@ public class Image {
         this.isDeleted = isDeleted;
     }
 
+    public void remove() {
+        this.isDeleted = true;
+    }
+
 }

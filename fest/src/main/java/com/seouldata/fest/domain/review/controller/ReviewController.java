@@ -35,4 +35,13 @@ public class ReviewController {
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
+    @DeleteMapping("/{reviewSeq}")
+    public ResponseEntity<EnvelopResponse> removeReview(@RequestHeader("memSeq") Long memSeq, @PathVariable("reviewSeq") Long reviewSeq) {
+
+        reviewService.removeReview(memSeq, reviewSeq);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
+    }
+
 }

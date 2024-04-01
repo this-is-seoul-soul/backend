@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional
@@ -89,6 +91,30 @@ public class ReviewServiceImpl implements ReviewService {
                             .tagNo(tag)
                             .build())
                     .forEach(tagRepository::save);
+        }
+    }
+
+    @Override
+    public void removeReview(Long memSeq, Long reviewSeq) {
+        Review review = reviewRepository.findByReviewSeq(reviewSeq)
+                .orElseThrow(() -> new BusinessException(ErrorCode.REVIEW_NOT_FOUND));
+
+        review.remove();
+
+        List<Image> imgList = imageRepository.findImagesByReviewSeq(reviewSeq);
+
+        if (imgList != null) {
+            for (Image img : imgList) {
+                img.remove();
+            }
+        }
+
+        List<Tag> tagList = tagRepository.findTagsByMemSeqAndReviewSeq(memSeq, reviewSeq);
+
+        if (tagList != null) {
+            for (Tag tag : tagList) {
+                tag.remove();
+            }
         }
     }
 
