@@ -1,7 +1,10 @@
 package com.seouldata.fest.domain.fest.service;
 
+import com.seouldata.common.exception.BusinessException;
+import com.seouldata.common.exception.ErrorCode;
 import com.seouldata.fest.domain.fest.client.OpenApiFeignClient;
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
+import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
 import com.seouldata.fest.domain.fest.dto.response.GetFestResDto;
 import com.seouldata.fest.domain.fest.entity.Codename;
 import com.seouldata.fest.domain.fest.entity.Fest;
@@ -11,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -105,6 +110,37 @@ public class FestServiceImpl implements FestService {
                         .isPublic(false)
                         .creator(memSeq)
                         .build()
+        );
+
+    }
+
+    @Override
+    public void updateFest(Long memSeq, ModifyFestReq modifyFestReq) {
+
+        Fest fest = festRepository.findByFestSeq(modifyFestReq.getFestSeq())
+                .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
+
+        if(!Objects.equals(memSeq, fest.getCreator()))
+            throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
+
+        int codename = Codename.getCodeNum(modifyFestReq.getCodeName());
+        if(codename == -1)
+            throw new BusinessException(ErrorCode.INVALID_CODE_NAME);
+
+        fest.modify(
+                modifyFestReq.getTitle(),
+                codename,
+                modifyFestReq.getGuName(),
+                modifyFestReq.getPlace(),
+                modifyFestReq.getUseTrgt(),
+                modifyFestReq.getIsFree(),
+                modifyFestReq.getUseFee(),
+                modifyFestReq.getStartDate().atStartOfDay(),
+                modifyFestReq.getEndDate().atStartOfDay(),
+                modifyFestReq.getLot(),
+                modifyFestReq.getLat(),
+                modifyFestReq.getOrgLink(),
+                modifyFestReq.getMainImg()
         );
 
     }
