@@ -11,4 +11,6 @@ public interface FestService {
 
     void updateFest(Long memSeq, ModifyFestReq modifyFestReq);
 
+    void removeFest(Long memSeq, Long festSeq);
+
 }

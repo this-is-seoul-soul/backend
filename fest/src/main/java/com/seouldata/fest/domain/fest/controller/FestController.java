@@ -35,4 +35,13 @@ public class FestController {
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
+    @DeleteMapping
+    public ResponseEntity<EnvelopResponse> removeFest(@RequestHeader("memSeq") Long memSeq, @RequestParam("festSeq") Long festSeq) {
+
+        festService.removeFest(memSeq, festSeq);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
+    }
+
 }
