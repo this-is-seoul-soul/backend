@@ -44,4 +44,8 @@ public class Tag {
         this.isDeleted = isDeleted;
     }
 
+    public void remove() {
+        this.isDeleted = true;
+    }
+
 }

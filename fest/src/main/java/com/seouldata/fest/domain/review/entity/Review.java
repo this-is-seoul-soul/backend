@@ -57,4 +57,8 @@ public class Review {
         this.point = point;
     }
 
+    public void remove() {
+        this.isDeleted = true;
+    }
+
 }
