@@ -154,7 +154,7 @@ public class FestServiceImpl implements FestService {
             if(!Objects.equals(memSeq, fest.getCreator()))
                 throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
 
-            festRepository.delete(fest);
+            fest.remove();
 
     }
 
