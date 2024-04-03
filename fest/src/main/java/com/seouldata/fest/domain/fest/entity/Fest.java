@@ -116,4 +116,8 @@ public class Fest {
         this.mainImg = mainImg;
     }
 
+    public void remove() {
+        this.isDeleted = true;
+    }
+
 }

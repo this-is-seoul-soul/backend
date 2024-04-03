@@ -145,4 +145,17 @@ public class FestServiceImpl implements FestService {
 
     }
 
+    @Override
+    public void removeFest(Long memSeq, Long festSeq) {
+
+            Fest fest = festRepository.findByFestSeq(festSeq)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
+
+            if(!Objects.equals(memSeq, fest.getCreator()))
+                throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
+
+            fest.remove();
+
+    }
+
 }
