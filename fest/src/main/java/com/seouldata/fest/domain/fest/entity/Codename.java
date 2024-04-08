@@ -38,4 +38,15 @@ public enum Codename {
         return -1;
     }
 
+    public static String getCodeType(int codeNum) {
+
+        for (Codename codename : Codename.values()) {
+            if (codename.codeNum == codeNum) {
+                return codename.codeType;
+            }
+        }
+
+        return ETC.codeType;
+    }
+
 }

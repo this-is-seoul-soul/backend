@@ -32,4 +32,11 @@ public class HeartController {
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
+    @GetMapping
+    public ResponseEntity<EnvelopResponse> getHeart(@RequestHeader("memSeq") Long memSeq) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().data(heartService.getHeart(memSeq)).code(HttpStatus.OK.value()).build());
+    }
+
 }
