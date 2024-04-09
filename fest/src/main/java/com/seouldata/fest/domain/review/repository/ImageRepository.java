@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
-    @Query(value = "select i from Image i where i.review.reviewSeq = :reviewSeq")
+    @Query(value = "select i from Image i where i.review.reviewSeq = :reviewSeq and i.isDeleted = false")
     List<Image> findImagesByReviewSeq(@Param("reviewSeq") Long reviewSeq);
 
     @Modifying
