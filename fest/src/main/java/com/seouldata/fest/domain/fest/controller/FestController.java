@@ -44,7 +44,7 @@ public class FestController {
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
-    @GetMapping("/searchDetail")
+    @GetMapping("/search/detail")
     public ResponseEntity<EnvelopResponse> getFestDetail(@RequestHeader("memSeq") Long memSeq, @RequestParam("festSeq") Long festSeq) {
 
         return ResponseEntity.status(HttpStatus.OK)
