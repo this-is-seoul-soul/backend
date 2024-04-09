@@ -17,6 +17,13 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    @GetMapping
+    public ResponseEntity<EnvelopResponse> findReview(@RequestHeader("memSeq") Long memSeq, @RequestParam("festSeq") Long festSeq) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().data(reviewService.findReview(memSeq, festSeq)).build());
+    }
+
     @PostMapping
     public ResponseEntity<EnvelopResponse> addReview(@RequestHeader("memSeq") Long memSeq, @RequestBody @Valid AddReviewReq addReviewReq) {
 

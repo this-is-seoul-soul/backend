@@ -5,6 +5,8 @@ import com.seouldata.common.exception.ErrorCode;
 import com.seouldata.fest.domain.review.dto.request.AddReviewReq;
 import com.seouldata.fest.domain.fest.entity.Fest;
 import com.seouldata.fest.domain.review.dto.request.ModifyReviewReq;
+import com.seouldata.fest.domain.review.dto.response.GetMemberInfoRes;
+import com.seouldata.fest.domain.review.dto.response.GetReviewRes;
 import com.seouldata.fest.domain.review.entity.Image;
 import com.seouldata.fest.domain.review.entity.Review;
 import com.seouldata.fest.domain.fest.repository.FestRepository;
@@ -12,12 +14,14 @@ import com.seouldata.fest.domain.review.entity.Tag;
 import com.seouldata.fest.domain.review.repository.ImageRepository;
 import com.seouldata.fest.domain.review.repository.ReviewRepository;
 import com.seouldata.fest.domain.review.repository.TagRepository;
+import com.seouldata.fest.domain.review.util.InfoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,6 +33,42 @@ public class ReviewServiceImpl implements ReviewService {
     private final FestRepository festRepository;
     private final ImageRepository imageRepository;
     private final TagRepository tagRepository;
+
+    private final InfoUtil infoUtil;
+
+    @Override
+    public List<GetReviewRes> findReview(Long memSeq, Long festSeq) {
+        Fest fest = festRepository.findByFestSeq(festSeq)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
+
+        List<Review> reviewList = reviewRepository.findByFestSeq(festSeq);
+
+        return reviewList.stream()
+                .map(review -> {
+
+                    GetMemberInfoRes creatInfo = infoUtil.getMemberInfo(memSeq);
+
+                    return GetReviewRes.builder()
+                            .reviewSeq(review.getReviewSeq())
+                            .content(review.getContent())
+                            .point(review.getPoint())
+                            .imgUrl(imageRepository.findImagesByReviewSeq(review.getReviewSeq())
+                                    .stream()
+                                    .map(image -> {
+                                        return image.getImgUrl();
+                                    }).collect(Collectors.toList()))
+                            .tag(tagRepository.findTagsByMemSeqAndReviewSeq(memSeq, review.getReviewSeq())
+                                    .stream()
+                                    .map(tag -> {
+                                        return tag.getTagNo();
+                                    }).collect(Collectors.toList()))
+                            .isMine((memSeq == review.getMemSeq()) ? true : false)
+                            .nickName(creatInfo.getNickname())
+                            .mbti(creatInfo.getMbti())
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
 
     @Override
     public Long addReview(Long memSeq, AddReviewReq addReviewReq) {

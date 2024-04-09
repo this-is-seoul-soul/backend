@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
-    @Query(value = "select t from Tag t where t.memSeq = :memSeq and t.review.reviewSeq = :reviewSeq")
+    @Query(value = "select t from Tag t where t.memSeq = :memSeq and t.review.reviewSeq = :reviewSeq and t.isDeleted = false")
     List<Tag> findTagsByMemSeqAndReviewSeq(@Param("memSeq") Long memSeq, @Param("reviewSeq") Long reviewSeq);
 
     @Modifying
