@@ -1,5 +1,6 @@
 package com.seouldata.fest.domain.review.repository;
 
+import com.seouldata.fest.domain.review.entity.Review;
 import com.seouldata.fest.domain.review.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,5 +19,8 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     @Modifying
     @Query(value = "delete from Tag where review.reviewSeq = :reviewSeq")
     void deleteAllByReviewSeq(@Param("reviewSeq") Long reviewSeq);
+
+    @Query(value = "select t.tagNo from Tag t where t.review = :review and t.isDeleted = false")
+    List<Integer> findTagsByReview(@Param("review") Review review);
 
 }

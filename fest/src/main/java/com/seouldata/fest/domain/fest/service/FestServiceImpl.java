@@ -5,17 +5,25 @@ import com.seouldata.common.exception.ErrorCode;
 import com.seouldata.fest.domain.fest.client.OpenApiFeignClient;
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
+import com.seouldata.fest.domain.fest.dto.response.GetFestRes;
 import com.seouldata.fest.domain.fest.dto.response.GetFestResDto;
+import com.seouldata.fest.domain.fest.dto.response.TagRes;
 import com.seouldata.fest.domain.fest.entity.Codename;
 import com.seouldata.fest.domain.fest.entity.Fest;
 import com.seouldata.fest.domain.fest.repository.FestRepository;
+import com.seouldata.fest.domain.review.entity.Review;
+import com.seouldata.fest.domain.review.repository.ReviewRepository;
+import com.seouldata.fest.domain.review.repository.TagRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,6 +34,10 @@ public class FestServiceImpl implements FestService {
     private final OpenApiFeignClient openApiFeignClient;
 
     private final FestRepository festRepository;
+
+    private final ReviewRepository reviewRepository;
+
+    private final TagRepository tagRepository;
 
     @Override
     @Scheduled(cron = "00 00 21 * * ?", zone = "Asia/Seoul")
@@ -156,6 +168,56 @@ public class FestServiceImpl implements FestService {
 
             fest.remove();
 
+    }
+
+    @Override
+    public GetFestRes getFestDetail(Long memSeq, Long festSeq) {
+
+        Fest fest = festRepository.findByFestSeq(festSeq)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
+
+        double avgPoint = reviewRepository.findPointByFest(fest);
+        int cntReview = reviewRepository.countAllByFestAndDeletedIsFalse(fest);
+
+        List<Review> reviewList = reviewRepository.findByFestAndDeletedIsFalse(fest);
+
+        Map<Integer, Integer> tagMap = reviewList.stream()
+                .flatMap(review -> tagRepository.findTagsByReview(review).stream())
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        tag -> 1,
+                        Integer::sum
+                ));
+
+        List<TagRes> tagResList = tagMap.entrySet().stream()
+                .map(integerIntegerEntry -> TagRes.builder()
+                        .tag(integerIntegerEntry.getKey())
+                        .cnt(integerIntegerEntry.getValue().intValue())
+                        .build())
+                .sorted(Comparator.comparingInt(TagRes::getTag))
+                .collect(Collectors.toList());
+
+        return GetFestRes.builder()
+                .festSeq(fest.getFestSeq())
+                .title(fest.getTitle())
+                .codeName(Codename.getCodeType(fest.getCodename()))
+                .guname(fest.getGuname())
+                .place(fest.getPlace())
+                .useTrgt(fest.getUseTrgt())
+                .isFree(fest.getIsFree())
+                .useFee(fest.getUseFee())
+                .startDate(fest.getStartDate())
+                .endDate(fest.getEndDate())
+                .lot(fest.getLot())
+                .lat(fest.getLat())
+                .orgLink(fest.getOrgLink())
+                .mainImg(fest.getMainImg())
+                .avgPoint(avgPoint)
+                .cntReview(cntReview)
+                .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
+                .isHeart(festRepository.findHeartByMemSeqAndFestSeq(memSeq, festSeq))
+                .tag(tagResList)
+                .build();
     }
 
 }
