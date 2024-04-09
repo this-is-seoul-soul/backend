@@ -41,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService {
         Fest fest = festRepository.findByFestSeq(festSeq)
                 .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
 
-        List<Review> reviewList = reviewRepository.findByFestSeq(festSeq);
+        List<Review> reviewList = reviewRepository.findByFestAndDeletedIsFalse(fest);
 
         return reviewList.stream()
                 .map(review -> {
