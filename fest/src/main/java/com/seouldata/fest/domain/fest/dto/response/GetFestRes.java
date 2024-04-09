@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Builder
@@ -16,29 +15,15 @@ public class GetFestRes {
 
     private String title;
 
-    private String codeName;
+    private String codename;
 
-    private String guname;
-
-    private String place;
-
-    private String useTrgt;
-
-    private String isFree;
-
-    private String useFee;
+    private String mainImg;
 
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
-    private double lot;
-
-    private double lat;
-
-    private String orgLink;
-
-    private String mainImg;
+    private String useFee;
 
     private double avgPoint;
 
@@ -47,7 +32,5 @@ public class GetFestRes {
     private boolean isContinue;
 
     private boolean isHeart;
-
-    private List<TagRes> tag;
 
 }

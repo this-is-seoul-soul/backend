@@ -51,4 +51,11 @@ public class FestController {
                 .body(EnvelopResponse.builder().data(festService.getFestDetail(memSeq, festSeq)).code(HttpStatus.OK.value()).build());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<EnvelopResponse> getFestByCode(@RequestHeader("memSeq") Long memSeq, @RequestParam("codename") String codename) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().data(festService.getFestByCode(memSeq, codename)).code(HttpStatus.OK.value()).build());
+    }
+
 }
