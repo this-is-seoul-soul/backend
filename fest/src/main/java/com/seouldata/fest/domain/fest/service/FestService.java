@@ -2,7 +2,10 @@ package com.seouldata.fest.domain.fest.service;
 
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
+import com.seouldata.fest.domain.fest.dto.response.GetFestDetailRes;
 import com.seouldata.fest.domain.fest.dto.response.GetFestRes;
+
+import java.util.List;
 
 public interface FestService {
 
@@ -14,6 +17,8 @@ public interface FestService {
 
     void removeFest(Long memSeq, Long festSeq);
 
-    GetFestRes getFestDetail(Long memSeq, Long festSeq);
+    GetFestDetailRes getFestDetail(Long memSeq, Long festSeq);
+
+    List<GetFestRes> getFestByCode(Long memSeq, String codename);
 
 }

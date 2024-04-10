@@ -5,11 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
 @AllArgsConstructor
-public class GetFestRes {
+public class GetFestDetailRes {
 
     private Long festSeq;
 
@@ -17,13 +18,27 @@ public class GetFestRes {
 
     private String codename;
 
-    private String mainImg;
+    private String guname;
+
+    private String place;
+
+    private String useTrgt;
+
+    private String isFree;
+
+    private String useFee;
 
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
-    private String useFee;
+    private double lot;
+
+    private double lat;
+
+    private String orgLink;
+
+    private String mainImg;
 
     private double avgPoint;
 
@@ -32,5 +47,7 @@ public class GetFestRes {
     private boolean isContinue;
 
     private boolean isHeart;
+
+    private List<TagRes> tag;
 
 }

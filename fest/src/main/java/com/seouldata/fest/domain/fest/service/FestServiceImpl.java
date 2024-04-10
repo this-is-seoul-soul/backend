@@ -5,6 +5,7 @@ import com.seouldata.common.exception.ErrorCode;
 import com.seouldata.fest.domain.fest.client.OpenApiFeignClient;
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
+import com.seouldata.fest.domain.fest.dto.response.GetFestDetailRes;
 import com.seouldata.fest.domain.fest.dto.response.GetFestRes;
 import com.seouldata.fest.domain.fest.dto.response.GetFestResDto;
 import com.seouldata.fest.domain.fest.dto.response.TagRes;
@@ -171,12 +172,12 @@ public class FestServiceImpl implements FestService {
     }
 
     @Override
-    public GetFestRes getFestDetail(Long memSeq, Long festSeq) {
+    public GetFestDetailRes getFestDetail(Long memSeq, Long festSeq) {
 
         Fest fest = festRepository.findByFestSeq(festSeq)
                 .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
 
-        double avgPoint = reviewRepository.findPointByFest(fest);
+        Double avgPoint = reviewRepository.findPointByFest(fest);
         int cntReview = reviewRepository.countAllByFestAndDeletedIsFalse(fest);
 
         List<Review> reviewList = reviewRepository.findByFestAndDeletedIsFalse(fest);
@@ -197,10 +198,10 @@ public class FestServiceImpl implements FestService {
                 .sorted(Comparator.comparingInt(TagRes::getTag))
                 .collect(Collectors.toList());
 
-        return GetFestRes.builder()
+        return GetFestDetailRes.builder()
                 .festSeq(fest.getFestSeq())
                 .title(fest.getTitle())
-                .codeName(Codename.getCodeType(fest.getCodename()))
+                .codename(Codename.getCodeType(fest.getCodename()))
                 .guname(fest.getGuname())
                 .place(fest.getPlace())
                 .useTrgt(fest.getUseTrgt())
@@ -212,12 +213,40 @@ public class FestServiceImpl implements FestService {
                 .lat(fest.getLat())
                 .orgLink(fest.getOrgLink())
                 .mainImg(fest.getMainImg())
-                .avgPoint(avgPoint)
+                .avgPoint(avgPoint == null ? 0.0 : avgPoint)
                 .cntReview(cntReview)
                 .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
                 .isHeart(festRepository.findHeartByMemSeqAndFestSeq(memSeq, festSeq))
                 .tag(tagResList)
                 .build();
+    }
+
+    @Override
+    public List<GetFestRes> getFestByCode(Long memSeq, String codename) {
+        System.out.println(Codename.getCodeNum(codename));
+        List<Fest> festList = festRepository.findFestByCodenameAndDeletedIsFalse(Codename.getCodeNum(codename));
+
+        return festList.stream()
+                .map(fest -> {
+
+                    Double avgPoint = reviewRepository.findPointByFest(fest);
+                    int cntReview = reviewRepository.countAllByFestAndDeletedIsFalse(fest);
+
+                    return GetFestRes.builder()
+                            .festSeq(fest.getFestSeq())
+                            .title(fest.getTitle())
+                            .codename(codename)
+                            .mainImg(fest.getMainImg())
+                            .startDate(fest.getStartDate())
+                            .endDate(fest.getEndDate())
+                            .useFee(fest.getUseFee())
+                            .avgPoint(avgPoint == null ? 0.0 : avgPoint)
+                            .cntReview(cntReview)
+                            .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
+                            .isHeart(festRepository.findHeartByMemSeqAndFestSeq(memSeq, fest.getFestSeq()))
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
 }
