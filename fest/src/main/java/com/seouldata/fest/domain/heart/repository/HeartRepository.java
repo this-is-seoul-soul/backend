@@ -18,4 +18,6 @@ public interface HeartRepository extends JpaRepository<Heart, Long> {
     @Query(value = "select f from Heart h left join Fest f on h.fest.festSeq = f.festSeq where h.memSeq = :memSeq")
     List<Fest> findFestByMemSeq(@Param("memSeq") Long memSeq);
 
+    boolean existsByFestAndAndMemSeq(Fest fest, long memSeq);
+
 }

@@ -4,11 +4,9 @@ import com.seouldata.common.exception.BusinessException;
 import com.seouldata.common.exception.ErrorCode;
 import com.seouldata.fest.domain.fest.client.OpenApiFeignClient;
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
+import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
-import com.seouldata.fest.domain.fest.dto.response.GetFestDetailRes;
-import com.seouldata.fest.domain.fest.dto.response.GetFestRes;
-import com.seouldata.fest.domain.fest.dto.response.GetFestResDto;
-import com.seouldata.fest.domain.fest.dto.response.TagRes;
+import com.seouldata.fest.domain.fest.dto.response.*;
 import com.seouldata.fest.domain.fest.entity.Codename;
 import com.seouldata.fest.domain.fest.entity.Fest;
 import com.seouldata.fest.domain.fest.repository.FestRepository;
@@ -247,6 +245,14 @@ public class FestServiceImpl implements FestService {
                             .build();
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GetFestByCriteriaResDto> getFestByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq) {
+
+        List<GetFestByCriteriaResDto> festList = festRepository.findAllByCriteria(memSeq, findFestByCriteriaReq);
+
+        return festList;
     }
 
 }

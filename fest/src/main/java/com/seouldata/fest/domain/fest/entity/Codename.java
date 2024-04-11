@@ -1,5 +1,7 @@
 package com.seouldata.fest.domain.fest.entity;
 
+import lombok.Getter;
+
 public enum Codename {
 
     MUSICAL_OPERA("뮤지컬/오페라", 1),
@@ -19,6 +21,7 @@ public enum Codename {
     FEST_ETC("축제-기타", 15),
     FEST_NATURE_LANDSCAPE("축제-자연/경관", 16);
 
+    @Getter
     private final String codeType;
     private final int codeNum;
 
