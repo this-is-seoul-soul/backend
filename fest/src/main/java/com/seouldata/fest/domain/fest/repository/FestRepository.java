@@ -1,5 +1,7 @@
 package com.seouldata.fest.domain.fest.repository;
 
+import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
+import com.seouldata.fest.domain.fest.dto.response.GetFestByCriteriaResDto;
 import com.seouldata.fest.domain.fest.entity.Fest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FestRepository extends JpaRepository<Fest, Long> {
+public interface FestRepository extends JpaRepository<Fest, Long>, FestRepositoryCustom {
 
     int countAllByIsPublic(boolean isPublic);
 
@@ -21,5 +23,7 @@ public interface FestRepository extends JpaRepository<Fest, Long> {
 
     @Query(value = "select f from Fest f where f.codename = :codename and f.isDeleted = false")
     List<Fest> findFestByCodenameAndDeletedIsFalse(@Param("codename") int codename);
+
+    List<GetFestByCriteriaResDto> findAllByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq);
 
 }

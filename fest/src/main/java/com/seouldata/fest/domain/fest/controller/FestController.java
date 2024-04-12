@@ -1,14 +1,21 @@
 package com.seouldata.fest.domain.fest.controller;
 
 import com.seouldata.common.response.EnvelopResponse;
+import com.seouldata.fest.domain.fest.annotation.validation.ValidCodeName;
+import com.seouldata.fest.domain.fest.annotation.validation.ValidFilterValues;
+import com.seouldata.fest.domain.fest.annotation.validation.ValidYear;
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
+import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
 import com.seouldata.fest.domain.fest.service.FestService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,6 +63,28 @@ public class FestController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder().data(festService.getFestByCode(memSeq, codename)).code(HttpStatus.OK.value()).build());
+    }
+
+    @GetMapping("/search/map")
+    public ResponseEntity<EnvelopResponse> getFestByCriteria(@RequestHeader("memSeq") Long memSeq,
+                                                             @RequestParam("lot") @NotNull double lot,
+                                                             @RequestParam("lat") @NotNull double lat,
+                                                             @RequestParam("distance") @NotNull int distance,
+                                                             @ValidFilterValues @RequestParam(value = "filter", required = false) List<String> filter,
+                                                             @ValidYear @RequestParam(value = "year", required = false) List<Integer> year,
+                                                             @ValidCodeName @RequestParam(value = "codeName", required = false) List<String> codeName) {
+
+        FindFestByCriteriaReq findFestByCriteriaReq = FindFestByCriteriaReq.builder()
+                .lot(lot)
+                .lat(lat)
+                .distance(distance)
+                .filter(filter)
+                .year(year)
+                .codename(codeName)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().data(festService.getFestByCriteria(memSeq, findFestByCriteriaReq)).code(HttpStatus.OK.value()).build());
     }
 
 }
