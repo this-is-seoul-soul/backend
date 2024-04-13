@@ -8,7 +8,10 @@ public enum AuthErrorCode implements ErrorCode {
 
     INVALID_TOKEN(300, "토큰이 유효하지 않습니다."),
 
-    USER_NOT_FOUND(300, "사용자를 찾을 수 없습니다.")
+    USER_NOT_FOUND(300, "사용자를 찾을 수 없습니다."),
+    USER_ALREADY_EXISTS(500, "이미 가입된 사용자입니다."),
+
+    NICKNAME_ALREADY_EXISTS(500, "이미 사용중인 닉네임입니다."),
     ;
 
     private final int code;
