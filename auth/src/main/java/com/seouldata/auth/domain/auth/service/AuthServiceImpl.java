@@ -51,6 +51,18 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    @Override
+    public GoogleLoginRes googleLogin(String googleId) {
+        Member member = authRepository.findByGoogleId(googleId)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+
+        return GoogleLoginRes.builder()
+                .googleId(member.getGoogleId())
+                .accessToken(generateAccessToken(member.getMemSeq().toString()))
+                .refreshToken(generateRefreshToken(member.getMemSeq().toString()))
+                .build();
+    }
+
     private String saveProfileImage(MultipartFile profile) throws IOException {
         return awsService.saveFile(profile);
     }

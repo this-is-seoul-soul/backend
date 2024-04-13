@@ -30,4 +30,15 @@ public class AuthController {
                 );
     }
 
+    @GetMapping("/login/google")
+    ResponseEntity<EnvelopResponse> googleLogin(
+            @RequestParam(value = "googleId") String googleId
+    ) {
+        return ResponseEntity.ok(
+                EnvelopResponse.builder()
+                        .data(authService.googleLogin(googleId))
+                        .build()
+        );
+    }
+
 }
