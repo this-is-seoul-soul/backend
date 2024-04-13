@@ -1,8 +1,11 @@
 package com.seouldata.auth.domain.auth.service;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
+import com.seouldata.auth.domain.auth.dto.response.CreateNicknameRes;
 import com.seouldata.auth.domain.auth.dto.response.JoinMemberRes;
 import com.seouldata.auth.domain.auth.entity.Member;
+import com.seouldata.auth.domain.auth.enums.Adjective;
+import com.seouldata.auth.domain.auth.enums.Noun;
 import com.seouldata.auth.domain.auth.repository.AuthRepository;
 import com.seouldata.auth.global.exception.AuthErrorCode;
 import com.seouldata.auth.global.exception.AuthException;
@@ -50,8 +53,27 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    @Override
+    public CreateNicknameRes createRandomNickname() {
+        Adjective adjective = Adjective.values()[getRandomNumber(Adjective.values().length)];
+        Noun noun = Noun.values()[getRandomNumber(Noun.values().length)];
+        String nickname = new StringBuilder()
+                .append(adjective.getKorean())
+                .append(" ")
+                .append(noun.getKorean())
+                .toString();
+
+        return CreateNicknameRes.builder()
+                .nickname(nickname)
+                .build();
+    }
+
     private String saveProfileImage(MultipartFile profile) throws IOException {
         return awsService.saveFile(profile);
+    }
+
+    private int getRandomNumber(int max) {
+        return (int) (Math.random() * max);
     }
 
 }
