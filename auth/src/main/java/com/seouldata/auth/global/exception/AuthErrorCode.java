@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum AuthErrorCode implements ErrorCode {
 
+    INVALID_TOKEN(300, "토큰이 유효하지 않습니다."),
+
     USER_NOT_FOUND(300, "사용자를 찾을 수 없습니다.")
     ;
 
