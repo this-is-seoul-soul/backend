@@ -30,6 +30,15 @@ public class AuthController {
                 );
     }
 
+
+    @GetMapping("/nickname")
+    public ResponseEntity<EnvelopResponse> createRandomNickname() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.createRandomNickname())
+                        .build()
+                );
+
     @GetMapping("/login/google")
     ResponseEntity<EnvelopResponse> googleLogin(
             @RequestParam(value = "googleId") String googleId
@@ -39,6 +48,7 @@ public class AuthController {
                                 .data(authService.googleLogin(googleId))
                                 .build()
                         );
+
     }
 
 }
