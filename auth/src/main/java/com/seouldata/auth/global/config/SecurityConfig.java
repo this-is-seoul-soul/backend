@@ -21,14 +21,11 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .httpBasic().disable()
-                .cors().and()
-                .csrf().disable()
                 .authorizeRequests(requests -> requests
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()  // preflight 로 보내는 요청
 
                         // swagger 요청은 모두 허용
-                        .requestMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**", "swagger-ui/**").permitAll()
 
                         // member 요청은 일부 허용
                         .requestMatchers(HttpMethod.GET, "/member/login/kakao").permitAll()
