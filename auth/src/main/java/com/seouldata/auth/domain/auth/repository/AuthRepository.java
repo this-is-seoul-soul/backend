@@ -11,4 +11,6 @@ public interface AuthRepository extends JpaRepository<Member, Long> {
 
     Optional<Object> findByNickname(String nickname);
 
+    Boolean existsByNickname(String nickname);
+
 }
