@@ -34,11 +34,11 @@ public class AuthController {
     ResponseEntity<EnvelopResponse> googleLogin(
             @RequestParam(value = "googleId") String googleId
     ) {
-        return ResponseEntity.ok(
-                EnvelopResponse.builder()
-                        .data(authService.googleLogin(googleId))
-                        .build()
-        );
+        return ResponseEntity.status(HttpStatus.OK)
+                        .body(EnvelopResponse.builder()
+                                .data(authService.googleLogin(googleId))
+                                .build()
+                        );
     }
 
 }
