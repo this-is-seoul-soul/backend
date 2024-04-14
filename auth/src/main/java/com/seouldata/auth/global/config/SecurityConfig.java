@@ -20,7 +20,9 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        return http.httpBasic().disable()
+                .cors().and()
+                .csrf().disable()
                 .authorizeRequests(requests -> requests
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()  // preflight 로 보내는 요청
 

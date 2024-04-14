@@ -1,6 +1,7 @@
 package com.seouldata.auth.domain.auth.service;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
+import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
 import com.seouldata.auth.domain.auth.dto.response.CreateNicknameRes;
 import com.seouldata.auth.domain.auth.dto.response.GoogleLoginRes;
 import com.seouldata.auth.domain.auth.dto.response.JoinMemberRes;
@@ -12,6 +13,8 @@ public interface AuthService {
 
     JoinMemberRes join(JoinMemberReq joinMemberReq, MultipartFile profile) throws IOException;
 
+    void modifyNickname(long memberSeq, ModifyNicknameReq modifyNicknameReq);
+  
     Boolean checkNicknameDuplicate(String nickname);
 
     CreateNicknameRes createRandomNickname();

@@ -1,6 +1,7 @@
 package com.seouldata.auth.domain.auth.service;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
+import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
 import com.seouldata.auth.domain.auth.dto.response.CreateNicknameRes;
 import com.seouldata.auth.domain.auth.dto.response.GoogleLoginRes;
 import com.seouldata.auth.domain.auth.dto.response.JoinMemberRes;
@@ -52,6 +53,16 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(generateAccessToken(createdMember.getMemSeq().toString()))
                 .refreshToken(generateRefreshToken(createdMember.getMemSeq().toString()))
                 .build();
+    }
+
+    @Override
+    public void modifyNickname(long memberSeq, ModifyNicknameReq modifyNicknameReq) {
+        Member member = authRepository.findById(memberSeq)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+
+        member.setNickname(modifyNicknameReq.getNickname());
+
+        authRepository.save(member);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.seouldata.auth.domain.auth.controller;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
+import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
 import com.seouldata.auth.domain.auth.service.AuthService;
+import com.seouldata.auth.global.annotation.Authorization;
 import com.seouldata.common.response.EnvelopResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,18 @@ public class AuthController {
                 );
     }
 
+    @PatchMapping("/nickname")
+    public ResponseEntity<EnvelopResponse> updateNickname(
+            @Authorization long memberSeq,
+            @RequestBody ModifyNicknameReq modifyNicknameReq
+    ) {
+        authService.modifyNickname(memberSeq, modifyNicknameReq);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                );
+    }
+  
     @GetMapping("/nickname/duplicate")
     public ResponseEntity<EnvelopResponse> checkNicknameDuplicate(
             @RequestParam(value = "nickname") String nickname
