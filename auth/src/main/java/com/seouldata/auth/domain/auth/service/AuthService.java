@@ -1,6 +1,7 @@
 package com.seouldata.auth.domain.auth.service;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
+import com.seouldata.auth.domain.auth.dto.request.ModifyMbtiReq;
 import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
 import com.seouldata.auth.domain.auth.dto.response.CreateNicknameRes;
 import com.seouldata.auth.domain.auth.dto.response.GoogleLoginRes;
@@ -20,5 +21,7 @@ public interface AuthService {
     CreateNicknameRes createRandomNickname();
 
     GoogleLoginRes googleLogin(String googleId);
+
+    void modifyMbti(long memberSeq, ModifyMbtiReq mbti);
 
 }
