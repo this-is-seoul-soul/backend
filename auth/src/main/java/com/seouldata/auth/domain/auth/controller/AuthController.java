@@ -19,7 +19,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping
-    public ResponseEntity<EnvelopResponse> join (
+    public ResponseEntity<EnvelopResponse> join(
             @RequestPart(value = "profile", required = false) MultipartFile profile,
             @RequestPart(value = "memberInfo") JoinMemberReq memberInfo
     ) throws IOException {
@@ -30,6 +30,15 @@ public class AuthController {
                 );
     }
 
+    @GetMapping("/nickname/duplicate")
+    public ResponseEntity<EnvelopResponse> checkNicknameDuplicate(
+            @RequestParam(value = "nickname") String nickname
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.checkNicknameDuplicate(nickname))
+                        .build()
+        );
 
     @GetMapping("/nickname")
     public ResponseEntity<EnvelopResponse> createRandomNickname() {

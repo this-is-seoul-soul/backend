@@ -81,6 +81,11 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    @Override
+    public Boolean checkNicknameDuplicate(String nickname) {
+        return authRepository.existsByNickname(nickname);
+    }
+
     private String saveProfileImage(MultipartFile profile) throws IOException {
         return awsService.saveFile(profile);
     }

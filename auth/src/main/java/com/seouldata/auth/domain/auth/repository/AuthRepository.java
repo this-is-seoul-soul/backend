@@ -13,4 +13,6 @@ public interface AuthRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByGoogleId(String googleId);
 
+    Boolean existsByNickname(String nickname);
+
 }

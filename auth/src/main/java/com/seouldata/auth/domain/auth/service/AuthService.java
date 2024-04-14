@@ -12,10 +12,10 @@ public interface AuthService {
 
     JoinMemberRes join(JoinMemberReq joinMemberReq, MultipartFile profile) throws IOException;
 
+    Boolean checkNicknameDuplicate(String nickname);
 
     CreateNicknameRes createRandomNickname();
 
     GoogleLoginRes googleLogin(String googleId);
-
 
 }
