@@ -39,6 +39,25 @@ public class AuthController {
                         .data(authService.checkNicknameDuplicate(nickname))
                         .build()
         );
+
+    @GetMapping("/nickname")
+    public ResponseEntity<EnvelopResponse> createRandomNickname() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.createRandomNickname())
+                        .build()
+                );
+
+    @GetMapping("/login/google")
+    ResponseEntity<EnvelopResponse> googleLogin(
+            @RequestParam(value = "googleId") String googleId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                        .body(EnvelopResponse.builder()
+                                .data(authService.googleLogin(googleId))
+                                .build()
+                        );
+
     }
 
 }

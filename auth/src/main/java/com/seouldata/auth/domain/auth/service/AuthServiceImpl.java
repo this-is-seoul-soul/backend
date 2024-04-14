@@ -1,8 +1,12 @@
 package com.seouldata.auth.domain.auth.service;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
+import com.seouldata.auth.domain.auth.dto.response.CreateNicknameRes;
+import com.seouldata.auth.domain.auth.dto.response.GoogleLoginRes;
 import com.seouldata.auth.domain.auth.dto.response.JoinMemberRes;
 import com.seouldata.auth.domain.auth.entity.Member;
+import com.seouldata.auth.domain.auth.enums.Adjective;
+import com.seouldata.auth.domain.auth.enums.Noun;
 import com.seouldata.auth.domain.auth.repository.AuthRepository;
 import com.seouldata.auth.global.exception.AuthErrorCode;
 import com.seouldata.auth.global.exception.AuthException;
@@ -42,11 +46,38 @@ public class AuthServiceImpl implements AuthService {
                 .image(saveProfileImage(profile))
                 .notification(false)
                 .build();
-        authRepository.save(member);
+        Member createdMember = authRepository.save(member);
 
         return JoinMemberRes.builder()
-                .accessToken(jwtProvider.generateAccessToken(member.getGoogleId()))
-                .refreshToken(jwtProvider.generateRefreshToken(member.getGoogleId()))
+                .accessToken(generateAccessToken(createdMember.getMemSeq().toString()))
+                .refreshToken(generateRefreshToken(createdMember.getMemSeq().toString()))
+                .build();
+    }
+
+    @Override
+    public GoogleLoginRes googleLogin(String googleId) {
+        Member member = authRepository.findByGoogleId(googleId)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+
+        return GoogleLoginRes.builder()
+                .googleId(member.getGoogleId())
+                .accessToken(generateAccessToken(member.getMemSeq().toString()))
+                .refreshToken(generateRefreshToken(member.getMemSeq().toString()))
+                .build();
+    }
+
+    @Override
+    public CreateNicknameRes createRandomNickname() {
+        Adjective adjective = Adjective.values()[getRandomNumber(Adjective.values().length)];
+        Noun noun = Noun.values()[getRandomNumber(Noun.values().length)];
+        String nickname = new StringBuilder()
+                .append(adjective.getKorean())
+                .append(" ")
+                .append(noun.getKorean())
+                .toString();
+
+        return CreateNicknameRes.builder()
+                .nickname(nickname)
                 .build();
     }
 
@@ -57,6 +88,17 @@ public class AuthServiceImpl implements AuthService {
 
     private String saveProfileImage(MultipartFile profile) throws IOException {
         return awsService.saveFile(profile);
+    }
+
+    private int getRandomNumber(int max) {
+        return (int) (Math.random() * max);
+  
+    private String generateAccessToken(String id) {
+        return jwtProvider.generateAccessToken(id);
+    }
+
+    private String generateRefreshToken(String id) {
+        return jwtProvider.generateRefreshToken(id);
     }
 
 }
