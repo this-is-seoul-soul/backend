@@ -59,4 +59,8 @@ public class Member {
         this.nickname = nickname;
     }
 
+    public void setMbti(String mbti) {
+        this.mbti = mbti;
+    }
+
 }
