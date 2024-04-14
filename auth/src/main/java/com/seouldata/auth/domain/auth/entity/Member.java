@@ -55,4 +55,8 @@ public class Member {
         this.notification = notification;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
 }

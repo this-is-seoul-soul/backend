@@ -1,6 +1,7 @@
 package com.seouldata.auth.domain.auth.service;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
+import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
 import com.seouldata.auth.domain.auth.dto.response.JoinMemberRes;
 import com.seouldata.auth.domain.auth.entity.Member;
 import com.seouldata.auth.domain.auth.repository.AuthRepository;
@@ -48,6 +49,16 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(jwtProvider.generateAccessToken(member.getGoogleId()))
                 .refreshToken(jwtProvider.generateRefreshToken(member.getGoogleId()))
                 .build();
+    }
+
+    @Override
+    public void modifyNickname(long memberSeq, ModifyNicknameReq modifyNicknameReq) {
+        Member member = authRepository.findById(memberSeq)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+
+        member.setNickname(modifyNicknameReq.getNickname());
+
+        authRepository.save(member);
     }
 
     private String saveProfileImage(MultipartFile profile) throws IOException {
