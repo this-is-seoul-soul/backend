@@ -92,6 +92,7 @@ public class AuthServiceImpl implements AuthService {
 
     private int getRandomNumber(int max) {
         return (int) (Math.random() * max);
+    }
   
     private String generateAccessToken(String id) {
         return jwtProvider.generateAccessToken(id);
