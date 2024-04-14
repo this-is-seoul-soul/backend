@@ -2,10 +2,7 @@ package com.seouldata.auth.domain.auth.service;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
 import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
-import com.seouldata.auth.domain.auth.dto.response.CreateNicknameRes;
-import com.seouldata.auth.domain.auth.dto.response.GetMemberInfoRes;
-import com.seouldata.auth.domain.auth.dto.response.GoogleLoginRes;
-import com.seouldata.auth.domain.auth.dto.response.JoinMemberRes;
+import com.seouldata.auth.domain.auth.dto.response.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,5 +20,7 @@ public interface AuthService {
     GoogleLoginRes googleLogin(String googleId);
 
     GetMemberInfoRes getMemberInfo(long memberSeq);
+
+    GetReviewWriterInfo getReviewWriterInfo(long memberSeq);
 
 }

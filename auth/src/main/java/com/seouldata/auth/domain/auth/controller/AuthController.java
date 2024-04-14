@@ -88,4 +88,15 @@ public class AuthController {
                 );
     }
 
+    @GetMapping("/createInfo")
+    public ResponseEntity<EnvelopResponse> getReviewWriterInfo(
+            @RequestParam(value = "memSeq") long memSeq
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.getReviewWriterInfo(memSeq))
+                        .build()
+                );
+    }
+
 }
