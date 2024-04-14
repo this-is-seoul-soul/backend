@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface AuthRepository extends JpaRepository<Member, Long> {
 
-    Optional<Object> findByEmail(String email);
+    Optional<Member> findByEmail(String email);
 
-    Optional<Object> findByNickname(String nickname);
+    Optional<Member> findByNickname(String nickname);
+
+    Optional<Member> findByGoogleId(String googleId);
+
+    Boolean existsByNickname(String nickname);
 
 }
