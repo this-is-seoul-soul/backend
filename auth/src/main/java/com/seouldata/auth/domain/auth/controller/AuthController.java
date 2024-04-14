@@ -77,4 +77,15 @@ public class AuthController {
 
     }
 
+    @GetMapping("/info")
+    public ResponseEntity<EnvelopResponse> getMemberInfo(
+            @Authorization long memberSeq
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.getMemberInfo(memberSeq))
+                        .build()
+                );
+    }
+
 }

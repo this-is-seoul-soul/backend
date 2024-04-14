@@ -3,6 +3,7 @@ package com.seouldata.auth.domain.auth.service;
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
 import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
 import com.seouldata.auth.domain.auth.dto.response.CreateNicknameRes;
+import com.seouldata.auth.domain.auth.dto.response.GetMemberInfoRes;
 import com.seouldata.auth.domain.auth.dto.response.GoogleLoginRes;
 import com.seouldata.auth.domain.auth.dto.response.JoinMemberRes;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,5 +21,7 @@ public interface AuthService {
     CreateNicknameRes createRandomNickname();
 
     GoogleLoginRes googleLogin(String googleId);
+
+    GetMemberInfoRes getMemberInfo(long memberSeq);
 
 }
