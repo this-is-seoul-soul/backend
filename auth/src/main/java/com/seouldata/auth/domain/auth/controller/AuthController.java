@@ -1,6 +1,7 @@
 package com.seouldata.auth.domain.auth.controller;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
+import com.seouldata.auth.domain.auth.dto.request.ModifyMbtiReq;
 import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
 import com.seouldata.auth.domain.auth.service.AuthService;
 import com.seouldata.auth.global.annotation.Authorization;
@@ -44,7 +45,7 @@ public class AuthController {
                         .build()
                 );
     }
-  
+
     @GetMapping("/nickname/duplicate")
     public ResponseEntity<EnvelopResponse> checkNicknameDuplicate(
             @RequestParam(value = "nickname") String nickname
@@ -58,22 +59,22 @@ public class AuthController {
 
     @GetMapping("/nickname")
     public ResponseEntity<EnvelopResponse> createRandomNickname() {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(EnvelopResponse.builder()
-                            .data(authService.createRandomNickname())
-                            .build()
-                    );
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.createRandomNickname())
+                        .build()
+                );
     }
 
     @GetMapping("/login/google")
-    ResponseEntity<EnvelopResponse> googleLogin(
+    public ResponseEntity<EnvelopResponse> googleLogin(
             @RequestParam(value = "googleId") String googleId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                        .body(EnvelopResponse.builder()
-                                .data(authService.googleLogin(googleId))
-                                .build()
-                        );
+                .body(EnvelopResponse.builder()
+                        .data(authService.googleLogin(googleId))
+                        .build()
+                );
 
     }
 
@@ -95,6 +96,19 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder()
                         .data(authService.getReviewWriterInfo(memSeq))
+                      .build()
+                );
+    }
+  
+    @PatchMapping("/mbti")
+    public ResponseEntity<EnvelopResponse> updateMbti(
+            @Authorization long memberSeq,
+            @RequestBody ModifyMbtiReq mbti
+            ) {
+        authService.modifyMbti(memberSeq, mbti);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
                         .build()
                 );
     }

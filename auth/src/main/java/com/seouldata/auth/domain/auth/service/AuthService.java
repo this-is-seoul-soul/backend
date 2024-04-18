@@ -1,6 +1,7 @@
 package com.seouldata.auth.domain.auth.service;
 
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
+import com.seouldata.auth.domain.auth.dto.request.ModifyMbtiReq;
 import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
 import com.seouldata.auth.domain.auth.dto.response.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +20,11 @@ public interface AuthService {
 
     GoogleLoginRes googleLogin(String googleId);
 
+
     GetMemberInfoRes getMemberInfo(long memberSeq);
 
     GetReviewWriterInfo getReviewWriterInfo(long memberSeq);
+
+    void modifyMbti(long memberSeq, ModifyMbtiReq mbti);
 
 }

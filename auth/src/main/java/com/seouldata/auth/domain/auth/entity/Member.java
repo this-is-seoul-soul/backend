@@ -1,5 +1,6 @@
 package com.seouldata.auth.domain.auth.entity;
 
+import com.seouldata.auth.domain.badge.entity.Own;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -7,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.util.List;
 
 @Entity
 @Table(name = "member")
@@ -44,6 +47,9 @@ public class Member {
     @NotNull
     private Boolean notification;
 
+    @OneToMany(mappedBy = "member")
+    private List<Own> owns;
+
     @Builder
     public Member(String email, String nickname, String image, String googleId, String mbti, String token, Boolean notification) {
         this.email = email;
@@ -57,6 +63,10 @@ public class Member {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void setMbti(String mbti) {
+        this.mbti = mbti;
     }
 
 }
