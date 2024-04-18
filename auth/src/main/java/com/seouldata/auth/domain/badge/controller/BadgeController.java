@@ -1,6 +1,7 @@
 package com.seouldata.auth.domain.badge.controller;
 
 import com.seouldata.auth.domain.badge.service.BadgeService;
+import com.seouldata.auth.global.annotation.Authorization;
 import com.seouldata.common.response.EnvelopResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
