@@ -3,9 +3,7 @@ package com.seouldata.auth.domain.auth.service;
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
 import com.seouldata.auth.domain.auth.dto.request.ModifyMbtiReq;
 import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
-import com.seouldata.auth.domain.auth.dto.response.CreateNicknameRes;
-import com.seouldata.auth.domain.auth.dto.response.GoogleLoginRes;
-import com.seouldata.auth.domain.auth.dto.response.JoinMemberRes;
+import com.seouldata.auth.domain.auth.dto.response.*;
 import com.seouldata.auth.domain.auth.entity.Member;
 import com.seouldata.auth.domain.auth.enums.Adjective;
 import com.seouldata.auth.domain.auth.enums.Noun;
@@ -79,6 +77,30 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public GetMemberInfoRes getMemberInfo(long memberSeq) {
+        Member member = authRepository.findById(memberSeq)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+
+        return GetMemberInfoRes.builder()
+                .email(member.getEmail())
+                .nickname(member.getNickname())
+                .profile(member.getImage())
+                .mbti(member.getMbti())
+                .notification(member.getNotification())
+                .build();
+    }
+
+    @Override
+    public GetReviewWriterInfo getReviewWriterInfo(long memberSeq) {
+        Member member = authRepository.findById(memberSeq)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+
+        return GetReviewWriterInfo.builder()
+                .nickname(member.getNickname())
+                .mbti(member.getMbti())
+                .build();
+    }
+
     public void modifyMbti(long memberSeq, ModifyMbtiReq mbti) {
         Member member = authRepository.findById(memberSeq)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));

@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/member/nickname/duplicate").permitAll()
                         .requestMatchers(HttpMethod.POST, "/member").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/member/notification").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/member/createInfo").permitAll()
 
                         // 그 외 요청은 모두 인증 필요
                         .anyRequest().authenticated()

@@ -78,6 +78,28 @@ public class AuthController {
 
     }
 
+    @GetMapping("/info")
+    public ResponseEntity<EnvelopResponse> getMemberInfo(
+            @Authorization long memberSeq
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.getMemberInfo(memberSeq))
+                        .build()
+                );
+    }
+
+    @GetMapping("/createInfo")
+    public ResponseEntity<EnvelopResponse> getReviewWriterInfo(
+            @RequestParam(value = "memSeq") long memSeq
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.getReviewWriterInfo(memSeq))
+                      .build()
+                );
+    }
+  
     @PatchMapping("/mbti")
     public ResponseEntity<EnvelopResponse> updateMbti(
             @Authorization long memberSeq,
