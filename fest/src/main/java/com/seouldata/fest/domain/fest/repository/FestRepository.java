@@ -26,4 +26,8 @@ public interface FestRepository extends JpaRepository<Fest, Long>, FestRepositor
 
     List<GetFestByCriteriaResDto> findAllByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq);
 
+    List<Fest> findByKeyword(String keyword);
+
+    List<Fest> findByKeywordAndLocation(String keyword, double lot, double lat);
+
 }

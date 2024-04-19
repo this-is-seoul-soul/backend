@@ -87,4 +87,11 @@ public class FestController {
                 .body(EnvelopResponse.builder().data(festService.getFestByCriteria(memSeq, findFestByCriteriaReq)).code(HttpStatus.OK.value()).build());
     }
 
+    @GetMapping
+    public ResponseEntity<EnvelopResponse> getFestList(@RequestHeader("memSeq") Long memSeq, @RequestParam("keyword") String keyword, @RequestParam("lot") double lot, @RequestParam("lat") double lat) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().data(festService.getFestList(memSeq, keyword, lot, lat)).code(HttpStatus.OK.value()).build());
+    }
+
 }

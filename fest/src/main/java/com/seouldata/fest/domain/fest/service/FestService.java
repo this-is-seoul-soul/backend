@@ -25,4 +25,6 @@ public interface FestService {
 
     List<GetFestByCriteriaResDto> getFestByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq);
 
+    List<GetFestRes> getFestList(Long memSeq, String keyword, double lot, double lat);
+
 }

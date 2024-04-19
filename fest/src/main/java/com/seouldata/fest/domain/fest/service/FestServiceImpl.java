@@ -250,9 +250,41 @@ public class FestServiceImpl implements FestService {
     @Override
     public List<GetFestByCriteriaResDto> getFestByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq) {
 
-        List<GetFestByCriteriaResDto> festList = festRepository.findAllByCriteria(memSeq, findFestByCriteriaReq);
+        return festRepository.findAllByCriteria(memSeq, findFestByCriteriaReq);
+    }
 
-        return festList;
+    @Override
+    public List<GetFestRes> getFestList(Long memSeq, String keyword, double lot, double lat) {
+
+        List<Fest> festList;
+
+        if(lat == -1 && lot == -1)
+            festList = festRepository.findByKeyword(keyword);
+
+        else
+            festList = festRepository.findByKeywordAndLocation(keyword, lot, lat);
+
+        return festList.stream()
+                .map(fest -> {
+
+                    Double avgPoint = reviewRepository.findPointByFest(fest);
+                    int cntReview = reviewRepository.countAllByFestAndDeletedIsFalse(fest);
+
+                    return GetFestRes.builder()
+                            .festSeq(fest.getFestSeq())
+                            .title(fest.getTitle())
+                            .codename(Codename.getCodeType(fest.getCodename()))
+                            .mainImg(fest.getMainImg())
+                            .startDate(fest.getStartDate())
+                            .endDate(fest.getEndDate())
+                            .useFee(fest.getUseFee())
+                            .avgPoint(avgPoint == null ? 0.0 : avgPoint)
+                            .cntReview(cntReview)
+                            .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
+                            .isHeart(festRepository.findHeartByMemSeqAndFestSeq(memSeq, fest.getFestSeq()))
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
 }

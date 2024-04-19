@@ -2,6 +2,7 @@ package com.seouldata.fest.domain.fest.repository;
 
 import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
 import com.seouldata.fest.domain.fest.dto.response.GetFestByCriteriaResDto;
+import com.seouldata.fest.domain.fest.entity.Fest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,6 +11,10 @@ import java.util.List;
 public interface FestRepositoryCustom {
 
     List<GetFestByCriteriaResDto> findAllByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq);
+
+    List<Fest> findByKeyword(String keyword);
+
+    List<Fest> findByKeywordAndLocation(String keyword, double lot, double lat);
 
 }
 
