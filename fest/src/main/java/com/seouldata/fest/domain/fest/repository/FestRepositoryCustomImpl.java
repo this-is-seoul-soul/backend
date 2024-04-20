@@ -10,6 +10,7 @@ import com.seouldata.fest.domain.fest.dto.response.GetFestByCriteriaResDto;
 import com.seouldata.fest.domain.fest.entity.Codename;
 import com.seouldata.fest.domain.fest.entity.Fest;
 import com.seouldata.fest.domain.fest.entity.QFest;
+import com.seouldata.fest.domain.heart.entity.QHeart;
 import com.seouldata.fest.domain.heart.repository.HeartRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +21,7 @@ public class FestRepositoryCustomImpl implements FestRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private final QFest fest = QFest.fest;
+    private final QHeart heart = QHeart.heart;
     private final HeartRepository heartRepository;
 
     @Override
@@ -99,4 +101,37 @@ public class FestRepositoryCustomImpl implements FestRepositoryCustom {
         return result;
     }
 
+    @Override
+    public List<Fest> findByKeyword(String keyword) {
+
+        List<Fest> result = queryFactory
+                .selectFrom(fest)
+                .leftJoin(heart).on(heart.fest.eq(fest))
+                .where(fest.title.contains(keyword)
+                        .and(fest.isDeleted.isFalse()))
+                .groupBy(fest.festSeq)
+                .orderBy(heart.count().desc())
+                .limit(20)
+                .fetch();
+
+        return result;
+    }
+
+    @Override
+    public List<Fest> findByKeywordAndLocation(String keyword, double lot, double lat) {
+
+        NumberExpression<Double> distanceExpression = Expressions.numberTemplate(Double.class,
+                "ST_DISTANCE_SPHERE(point(fest.lat, fest.lot), point(?1, ?2))", lat, lot);
+
+        List<Fest> result = queryFactory
+                .select(fest)
+                .from(fest)
+                .where(fest.title.contains(keyword)
+                        .and(fest.isDeleted.isFalse()))
+                .orderBy(distanceExpression.asc(), fest.festSeq.desc())
+                .limit(20)
+                .fetch();
+
+        return result;
+    }
 }
