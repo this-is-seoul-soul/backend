@@ -14,6 +14,7 @@ public enum ErrorCode {
 
     // Review 관련
     REVIEW_NOT_FOUND(400, "해당 리뷰가 없습니다."),
+    SEARCH_OPTION_INVALID(400, "검색 조건이 잘못되었습니다."),
 
     // Heart 관련
     HEART_NOT_FOUND(400, "찜한 내역이 없습니다");
