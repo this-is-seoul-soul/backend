@@ -121,6 +121,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public GetNewAccessTokenRes generateNewToken(String token) {
+        return GetNewAccessTokenRes.builder()
+                .accessToken(jwtProvider.reIssue(token))
+                .build();
+    }
+
+    @Override
     public CreateNicknameRes createRandomNickname() {
         Adjective adjective = Adjective.values()[getRandomNumber(Adjective.values().length)];
         Noun noun = Noun.values()[getRandomNumber(Noun.values().length)];
