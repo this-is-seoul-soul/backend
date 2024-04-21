@@ -29,4 +29,6 @@ public interface AuthService {
 
     void logout(String token);
 
+    void quit(String token);
+
 }
