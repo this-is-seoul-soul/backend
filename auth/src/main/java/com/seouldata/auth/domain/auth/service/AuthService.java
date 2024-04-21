@@ -27,4 +27,6 @@ public interface AuthService {
 
     void modifyMbti(long memberSeq, ModifyMbtiReq mbti);
 
+    void logout(String token);
+
 }

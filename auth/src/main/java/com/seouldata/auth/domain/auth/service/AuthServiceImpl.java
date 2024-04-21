@@ -111,6 +111,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public void logout(String token) {
+        long memSeq = Long.parseLong(jwtProvider.extractMemberId(token));
+
+        Member member = authRepository.findById(memSeq)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+
+        jwtProvider.storeBlacklist(token, String.valueOf(member.getMemSeq()));
+    }
+
+    @Override
     public CreateNicknameRes createRandomNickname() {
         Adjective adjective = Adjective.values()[getRandomNumber(Adjective.values().length)];
         Noun noun = Noun.values()[getRandomNumber(Noun.values().length)];

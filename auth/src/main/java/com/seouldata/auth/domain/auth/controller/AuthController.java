@@ -96,16 +96,28 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder()
                         .data(authService.getReviewWriterInfo(memSeq))
-                      .build()
+                        .build()
                 );
     }
-  
+
     @PatchMapping("/mbti")
     public ResponseEntity<EnvelopResponse> updateMbti(
             @Authorization long memberSeq,
             @RequestBody ModifyMbtiReq mbti
-            ) {
+    ) {
         authService.modifyMbti(memberSeq, mbti);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .build()
+                );
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<EnvelopResponse> logout(
+            @RequestHeader(value = "Authorization") String token
+    ) {
+        authService.logout(token);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder()
