@@ -18,10 +18,11 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public ResponseEntity<EnvelopResponse> findReview(@RequestHeader("memSeq") Long memSeq, @RequestParam("festSeq") Long festSeq) {
+    public ResponseEntity<EnvelopResponse> findReview(@RequestHeader("memSeq") Long memSeq, @RequestParam("festSeq") Long festSeq,
+                                                      @RequestParam("sort") int sort, @RequestParam("page") int page, @RequestParam("limit") int limit) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(reviewService.findReview(memSeq, festSeq)).build());
+                .body(EnvelopResponse.builder().data(reviewService.findReview(memSeq, festSeq, sort, page, limit)).build());
     }
 
     @PostMapping
