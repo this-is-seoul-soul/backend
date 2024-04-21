@@ -112,11 +112,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(String token) {
-        long memSeq = Long.parseLong(jwtProvider.extractMemberId(token));
-
-        Member member = authRepository.findById(memSeq)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
-
+        Member member = findMemberByToken(token);
         jwtProvider.storeBlacklist(token, String.valueOf(member.getMemSeq()));
     }
 
@@ -154,6 +150,13 @@ public class AuthServiceImpl implements AuthService {
 
     private String generateRefreshToken(String id) {
         return jwtProvider.generateRefreshToken(id);
+    }
+
+    private Member findMemberByToken(String token) {
+        long memSeq = Long.parseLong(jwtProvider.extractMemberId(token));
+
+        return authRepository.findById(memSeq)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
     }
 
 }
