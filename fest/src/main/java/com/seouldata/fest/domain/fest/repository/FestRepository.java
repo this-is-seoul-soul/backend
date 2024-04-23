@@ -21,9 +21,6 @@ public interface FestRepository extends JpaRepository<Fest, Long>, FestRepositor
     @Query(value = "select case when count(h) > 0 then true else false end from Fest f left join Heart h on f.festSeq = h.fest.festSeq where h.memSeq = :memSeq and h.fest.festSeq = :festSeq")
     boolean findHeartByMemSeqAndFestSeq(@Param("memSeq") Long memSeq, @Param("festSeq") Long festSeq);
 
-    @Query(value = "select f from Fest f where f.codename = :codename and f.isDeleted = false")
-    List<Fest> findFestByCodenameAndDeletedIsFalse(@Param("codename") int codename);
-
     List<GetFestByCriteriaResDto> findAllByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq);
 
     List<Fest> findByKeyword(String keyword);

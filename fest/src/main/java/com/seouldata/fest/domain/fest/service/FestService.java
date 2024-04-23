@@ -1,6 +1,7 @@
 package com.seouldata.fest.domain.fest.service;
 
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
+import com.seouldata.fest.domain.fest.dto.request.FindByCodeReq;
 import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
 import com.seouldata.fest.domain.fest.dto.response.GetFestDetailRes;
@@ -21,7 +22,7 @@ public interface FestService {
 
     GetFestDetailRes getFestDetail(Long memSeq, Long festSeq);
 
-    List<GetFestRes> getFestByCode(Long memSeq, String codename);
+    List<GetFestRes> getFestByCode(Long memSeq, FindByCodeReq findByCodeReq);
 
     List<GetFestByCriteriaResDto> getFestByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq);
 
