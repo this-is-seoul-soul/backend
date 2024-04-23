@@ -5,6 +5,7 @@ import com.seouldata.fest.domain.fest.annotation.validation.ValidCodeName;
 import com.seouldata.fest.domain.fest.annotation.validation.ValidFilterValues;
 import com.seouldata.fest.domain.fest.annotation.validation.ValidYear;
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
+import com.seouldata.fest.domain.fest.dto.request.FindByCodeReq;
 import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
 import com.seouldata.fest.domain.fest.service.FestService;
@@ -59,10 +60,27 @@ public class FestController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<EnvelopResponse> getFestByCode(@RequestHeader("memSeq") Long memSeq, @RequestParam("codename") String codename) {
+    public ResponseEntity<EnvelopResponse> getFestByCode(@RequestHeader("memSeq") Long memSeq,
+                                                         @RequestParam("codename") String codename,
+                                                         @RequestParam("isFree") boolean isFree,
+                                                         @RequestParam("isContinue") boolean isContinue,
+                                                         @RequestParam(value = "region") String region,
+                                                         @RequestParam("sort") int sort,
+                                                         @RequestParam("page") int page,
+                                                         @RequestParam("limit") int limit) {
+
+        FindByCodeReq findByCodeReq = FindByCodeReq.builder()
+                .codename(codename)
+                .isFree(isFree)
+                .isContinue(isContinue)
+                .region(region)
+                .sort(sort)
+                .page(page)
+                .limit(limit)
+                .build();
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(festService.getFestByCode(memSeq, codename)).code(HttpStatus.OK.value()).build());
+                .body(EnvelopResponse.builder().data(festService.getFestByCode(memSeq, findByCodeReq)).code(HttpStatus.OK.value()).build());
     }
 
     @GetMapping("/search/map")

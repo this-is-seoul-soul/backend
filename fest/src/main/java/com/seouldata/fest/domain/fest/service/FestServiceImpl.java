@@ -4,6 +4,7 @@ import com.seouldata.common.exception.BusinessException;
 import com.seouldata.common.exception.ErrorCode;
 import com.seouldata.fest.domain.fest.client.OpenApiFeignClient;
 import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
+import com.seouldata.fest.domain.fest.dto.request.FindByCodeReq;
 import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
 import com.seouldata.fest.domain.fest.dto.response.*;
@@ -16,6 +17,7 @@ import com.seouldata.fest.domain.review.repository.TagRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -220,9 +222,8 @@ public class FestServiceImpl implements FestService {
     }
 
     @Override
-    public List<GetFestRes> getFestByCode(Long memSeq, String codename) {
-        System.out.println(Codename.getCodeNum(codename));
-        List<Fest> festList = festRepository.findFestByCodenameAndDeletedIsFalse(Codename.getCodeNum(codename));
+    public List<GetFestRes> getFestByCode(Long memSeq, FindByCodeReq findByCodeReq) {
+        List<Fest> festList = festRepository.findByCodeWithCursor(findByCodeReq, findByCodeReq.getSort(), PageRequest.of(findByCodeReq.getPage(), findByCodeReq.getLimit()));
 
         return festList.stream()
                 .map(fest -> {
@@ -233,14 +234,14 @@ public class FestServiceImpl implements FestService {
                     return GetFestRes.builder()
                             .festSeq(fest.getFestSeq())
                             .title(fest.getTitle())
-                            .codename(codename)
+                            .codename(findByCodeReq.getCodename())
                             .mainImg(fest.getMainImg())
                             .startDate(fest.getStartDate())
                             .endDate(fest.getEndDate())
                             .useFee(fest.getUseFee())
                             .avgPoint(avgPoint == null ? 0.0 : avgPoint)
                             .cntReview(cntReview)
-                            .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
+                            .isContinue(findByCodeReq.isContinue() ? true : fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
                             .isHeart(festRepository.findHeartByMemSeqAndFestSeq(memSeq, fest.getFestSeq()))
                             .build();
                 })

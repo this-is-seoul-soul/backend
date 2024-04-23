@@ -1,19 +1,28 @@
 package com.seouldata.fest.domain.fest.repository;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.seouldata.common.exception.BusinessException;
+import com.seouldata.common.exception.ErrorCode;
+import com.seouldata.fest.domain.fest.dto.request.FindByCodeReq;
 import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
 import com.seouldata.fest.domain.fest.dto.response.GetFestByCriteriaResDto;
 import com.seouldata.fest.domain.fest.entity.Codename;
 import com.seouldata.fest.domain.fest.entity.Fest;
 import com.seouldata.fest.domain.fest.entity.QFest;
+import com.seouldata.fest.domain.fest.entity.SortOption;
 import com.seouldata.fest.domain.heart.entity.QHeart;
 import com.seouldata.fest.domain.heart.repository.HeartRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,6 +32,9 @@ public class FestRepositoryCustomImpl implements FestRepositoryCustom {
     private final QFest fest = QFest.fest;
     private final QHeart heart = QHeart.heart;
     private final HeartRepository heartRepository;
+
+    private final String FREE = "무료";
+    private final String ALL = "전체";
 
     @Override
     public List<GetFestByCriteriaResDto> findAllByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq) {
@@ -134,4 +146,50 @@ public class FestRepositoryCustomImpl implements FestRepositoryCustom {
 
         return result;
     }
+
+    @Override
+    public List<Fest> findByCodeWithCursor(FindByCodeReq findByCodeReq, int sort, Pageable pageable) {
+        OrderSpecifier[] orderSpecifiers = createOrderOption(SortOption.getSortOption(sort));
+
+        BooleanExpression predicate = fest.isDeleted.isFalse();
+
+        int codeNum = Codename.getCodeNum(findByCodeReq.getCodename());
+        if (codeNum > 0) {
+            predicate = predicate.and(fest.codename.eq(codeNum));
+        }
+        if (findByCodeReq.isFree()) {
+            predicate = predicate.and(fest.isFree.eq(FREE));
+        }
+        if (findByCodeReq.isContinue()) {
+            predicate = predicate.and(fest.startDate.before(LocalDateTime.now())).and(fest.endDate.after(LocalDateTime.now()));
+        }
+        if (findByCodeReq.getRegion() != null && !findByCodeReq.getRegion().equals(ALL)) {
+            predicate = predicate.and(fest.guname.eq(findByCodeReq.getRegion()));
+        }
+
+        return queryFactory.selectFrom(fest)
+                .where(predicate)
+                .orderBy(orderSpecifiers)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    private OrderSpecifier[] createOrderOption(SortOption sort) {
+        List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
+
+        switch (sort) {
+            case RECOMMEND:
+                orderSpecifiers.add(new OrderSpecifier(Order.ASC, fest.festSeq));
+                break;
+            case NEW:
+                orderSpecifiers.add(new OrderSpecifier(Order.DESC, fest.festSeq));
+                break;
+            default:
+                throw new BusinessException(ErrorCode.SEARCH_OPTION_INVALID);
+        }
+
+        return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);
+    }
+
 }
