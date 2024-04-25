@@ -1,5 +1,6 @@
 package com.seouldata.auth.domain.auth.entity;
 
+import com.seouldata.auth.domain.badge.entity.Badge;
 import com.seouldata.auth.domain.badge.entity.Own;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -47,6 +48,10 @@ public class Member {
     @NotNull
     private Boolean notification;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "badge_seq")
+    private Badge badgeSeq;
+
     @OneToMany(mappedBy = "member")
     private List<Own> owns;
 
@@ -67,6 +72,10 @@ public class Member {
 
     public void setMbti(String mbti) {
         this.mbti = mbti;
+    }
+
+    public void setBadgeSeq(Badge badgeSeq) {
+        this.badgeSeq = badgeSeq;
     }
 
 }
