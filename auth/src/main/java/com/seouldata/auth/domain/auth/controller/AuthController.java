@@ -132,7 +132,8 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder()
                         .data(authService.generateNewToken(token))
-                      );
+                        .build()
+                );
     }
 
     @DeleteMapping("/quit")
