@@ -125,6 +125,16 @@ public class AuthController {
                 );
     }
 
+    @GetMapping("token/new")
+    public ResponseEntity<EnvelopResponse> generateNewToken(
+            @RequestHeader(value = "Authorization") String token
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.generateNewToken(token))
+                      );
+    }
+
     @DeleteMapping("/quit")
     public ResponseEntity<EnvelopResponse> quit(
             @RequestHeader("Authorization") String token

@@ -29,6 +29,8 @@ public interface AuthService {
 
     void logout(String token);
 
+    GetNewAccessTokenRes generateNewToken(String token);
+
     void quit(String token);
 
 }
