@@ -31,4 +31,6 @@ public interface AuthService {
 
     GetNewAccessTokenRes generateNewToken(String token);
 
+    void quit(String token);
+
 }
