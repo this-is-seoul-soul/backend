@@ -11,9 +11,11 @@ import com.seouldata.fest.domain.fest.dto.response.*;
 import com.seouldata.fest.domain.fest.entity.Codename;
 import com.seouldata.fest.domain.fest.entity.Fest;
 import com.seouldata.fest.domain.fest.repository.FestRepository;
+import com.seouldata.fest.domain.review.dto.response.GetMemberInfoRes;
 import com.seouldata.fest.domain.review.entity.Review;
 import com.seouldata.fest.domain.review.repository.ReviewRepository;
 import com.seouldata.fest.domain.review.repository.TagRepository;
+import com.seouldata.fest.domain.review.util.InfoUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,10 +37,10 @@ public class FestServiceImpl implements FestService {
     private final OpenApiFeignClient openApiFeignClient;
 
     private final FestRepository festRepository;
-
     private final ReviewRepository reviewRepository;
-
     private final TagRepository tagRepository;
+
+    private final InfoUtil infoUtil;
 
     @Override
     @Scheduled(cron = "00 00 21 * * ?", zone = "Asia/Seoul")
@@ -47,7 +49,7 @@ public class FestServiceImpl implements FestService {
         long firstFestIdx = festRepository.countAllByIsPublic(true) + 1;
         int lastFestIdx = openApiFeignClient.getFestCnt().getCulturalEventInfo().getListTotalCount();
 
-        if(firstFestIdx >= lastFestIdx)
+        if (firstFestIdx >= lastFestIdx)
             return;
 
         boolean stopFlag = false;
@@ -133,11 +135,11 @@ public class FestServiceImpl implements FestService {
         Fest fest = festRepository.findByFestSeq(modifyFestReq.getFestSeq())
                 .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
 
-        if(!Objects.equals(memSeq, fest.getCreator()))
+        if (!Objects.equals(memSeq, fest.getCreator()))
             throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
 
         int codename = Codename.getCodeNum(modifyFestReq.getCodeName());
-        if(codename == -1)
+        if (codename == -1)
             throw new BusinessException(ErrorCode.INVALID_CODE_NAME);
 
         fest.modify(
@@ -161,13 +163,13 @@ public class FestServiceImpl implements FestService {
     @Override
     public void removeFest(Long memSeq, Long festSeq) {
 
-            Fest fest = festRepository.findByFestSeq(festSeq)
-                    .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
+        Fest fest = festRepository.findByFestSeq(festSeq)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
 
-            if(!Objects.equals(memSeq, fest.getCreator()))
-                throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
+        if (!Objects.equals(memSeq, fest.getCreator()))
+            throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
 
-            fest.remove();
+        fest.remove();
 
     }
 
@@ -259,7 +261,7 @@ public class FestServiceImpl implements FestService {
 
         List<Fest> festList;
 
-        if(lat == -1 && lot == -1)
+        if (lat == -1 && lot == -1)
             festList = festRepository.findByKeyword(keyword);
 
         else
@@ -279,6 +281,60 @@ public class FestServiceImpl implements FestService {
                             .startDate(fest.getStartDate())
                             .endDate(fest.getEndDate())
                             .useFee(fest.getUseFee())
+                            .avgPoint(avgPoint == null ? 0.0 : avgPoint)
+                            .cntReview(cntReview)
+                            .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
+                            .isHeart(festRepository.findHeartByMemSeqAndFestSeq(memSeq, fest.getFestSeq()))
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GetFestDetailRes> getRecommendFest(Long memSeq) {
+
+        GetMemberInfoRes creatInfo = infoUtil.getMemberInfo(memSeq);
+        String mbti = creatInfo.getMbti();
+
+        List<Integer> festCoodenumList = new ArrayList<>();
+
+        for (Codename codename : Codename.values()) {
+            if (codename.getFesti().equals("XXXX")) {
+                festCoodenumList.add(codename.getCodeNum());
+            } else {
+                int matchCnt = 0;
+                for (int i = 0; i < 4; i++) {
+                    if (mbti.charAt(i) == codename.getFesti().charAt(i))
+                        matchCnt++;
+                }
+                if (matchCnt >= 3)
+                    festCoodenumList.add(codename.getCodeNum());
+            }
+        }
+
+        List<Fest> festList = festRepository.findTop10ByCodenameInOrderByFestSeqDesc(festCoodenumList);
+
+        return festList.stream()
+                .map(fest -> {
+
+                    Double avgPoint = reviewRepository.findPointByFest(fest);
+                    int cntReview = reviewRepository.countAllByFestAndDeletedIsFalse(fest);
+
+                    return GetFestDetailRes.builder()
+                            .festSeq(fest.getFestSeq())
+                            .title(fest.getTitle())
+                            .codename(Codename.getCodeType(fest.getCodename()))
+                            .guname(fest.getGuname())
+                            .place(fest.getPlace())
+                            .useTrgt(fest.getUseTrgt())
+                            .isFree(fest.getIsFree())
+                            .useFee(fest.getUseFee())
+                            .startDate(fest.getStartDate())
+                            .endDate(fest.getEndDate())
+                            .lot(fest.getLot())
+                            .lat(fest.getLat())
+                            .orgLink(fest.getOrgLink())
+                            .mainImg(fest.getMainImg())
                             .avgPoint(avgPoint == null ? 0.0 : avgPoint)
                             .cntReview(cntReview)
                             .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))

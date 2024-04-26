@@ -27,4 +27,6 @@ public interface FestRepository extends JpaRepository<Fest, Long>, FestRepositor
 
     List<Fest> findByKeywordAndLocation(String keyword, double lot, double lat);
 
+    List<Fest> findTop10ByCodenameInOrderByFestSeqDesc(List<Integer> festCoodenumList);
+
 }

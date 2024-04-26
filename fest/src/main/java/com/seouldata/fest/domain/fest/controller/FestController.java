@@ -112,4 +112,11 @@ public class FestController {
                 .body(EnvelopResponse.builder().data(festService.getFestList(memSeq, keyword, lot, lat)).code(HttpStatus.OK.value()).build());
     }
 
+    @GetMapping("/recommend")
+    public ResponseEntity<EnvelopResponse> getRecommendFest(@RequestHeader("memSeq") Long memSeq) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().data(festService.getRecommendFest(memSeq)).code(HttpStatus.OK.value()).build());
+    }
+
 }

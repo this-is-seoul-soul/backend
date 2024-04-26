@@ -4,8 +4,8 @@ import com.seouldata.fest.domain.fest.dto.request.AddFestReq;
 import com.seouldata.fest.domain.fest.dto.request.FindByCodeReq;
 import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
-import com.seouldata.fest.domain.fest.dto.response.GetFestDetailRes;
 import com.seouldata.fest.domain.fest.dto.response.GetFestByCriteriaResDto;
+import com.seouldata.fest.domain.fest.dto.response.GetFestDetailRes;
 import com.seouldata.fest.domain.fest.dto.response.GetFestRes;
 
 import java.util.List;
@@ -27,5 +27,7 @@ public interface FestService {
     List<GetFestByCriteriaResDto> getFestByCriteria(Long memSeq, FindFestByCriteriaReq findFestByCriteriaReq);
 
     List<GetFestRes> getFestList(Long memSeq, String keyword, double lot, double lat);
+
+    List<GetFestDetailRes> getRecommendFest(Long memSeq);
 
 }
