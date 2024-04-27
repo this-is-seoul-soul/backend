@@ -49,7 +49,7 @@ public class Member {
     private Boolean notification;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "badge_seq")
+    @JoinColumn(name = "badge_seq")
     private Badge badgeSeq;
 
     @OneToMany(mappedBy = "member")

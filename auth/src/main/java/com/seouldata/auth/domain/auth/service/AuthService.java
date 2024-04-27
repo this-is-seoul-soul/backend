@@ -33,4 +33,6 @@ public interface AuthService {
 
     void quit(String token);
 
+    GetMemberStatusRes checkStatus(String googleId);
+
 }
