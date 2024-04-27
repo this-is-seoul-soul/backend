@@ -2,3 +2,4 @@ rootProject.name = 'seouldata'
 
 include 'common'
 include 'auth'
+include 'fest'
