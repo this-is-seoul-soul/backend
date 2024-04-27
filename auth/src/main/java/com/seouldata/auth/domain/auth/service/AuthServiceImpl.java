@@ -6,6 +6,7 @@ import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
 import com.seouldata.auth.domain.auth.dto.response.*;
 import com.seouldata.auth.domain.auth.entity.Member;
 import com.seouldata.auth.domain.auth.enums.Adjective;
+import com.seouldata.auth.domain.auth.enums.MemberStatus;
 import com.seouldata.auth.domain.auth.enums.Noun;
 import com.seouldata.auth.domain.auth.repository.AuthRepository;
 import com.seouldata.auth.global.exception.AuthErrorCode;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -121,6 +123,29 @@ public class AuthServiceImpl implements AuthService {
         Member member = findMemberByToken(token);
         jwtProvider.storeBlacklist(token, String.valueOf(member.getMemSeq()));
         authRepository.delete(member);
+    }
+
+    @Override
+    public GetMemberStatusRes checkStatus(String googleId) {
+        return authRepository.findByGoogleId(googleId)
+                .map(member -> {
+                    if (member.getNickname().isBlank()) { // 닉네임이 없는 경우
+                        return GetMemberStatusRes.builder()
+                                .status(MemberStatus.NICKNAME.getLabel())
+                                .build();
+                    }
+                    if (member.getMbti() == null || member.getMbti().isBlank()) { // MBTI가 없는 경우
+                        return GetMemberStatusRes.builder()
+                                .status(MemberStatus.FESTI.getLabel())
+                                .build();
+                    }
+                    return GetMemberStatusRes.builder()
+                            .status(MemberStatus.COMPLETE.getLabel())
+                            .build(); // 회원 가입이 완료된 경우
+                })
+                .orElse(GetMemberStatusRes.builder()
+                        .status(MemberStatus.INIT.getLabel())
+                        .build());
     }
 
     @Override

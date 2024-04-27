@@ -148,4 +148,15 @@ public class AuthController {
                 );
     }
 
+    @GetMapping("/status")
+    public ResponseEntity<EnvelopResponse> checkStatus(
+            @RequestParam(value = "googleId") String googleId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.checkStatus(googleId))
+                        .build()
+                );
+    }
+
 }
