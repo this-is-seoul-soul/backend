@@ -1,7 +1,7 @@
 package com.seouldata.auth.global.jwt;
 
-import com.seouldata.auth.global.exception.AuthErrorCode;
-import com.seouldata.auth.global.exception.AuthException;
+import com.seouldata.common.exception.BusinessException;
+import com.seouldata.common.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -117,14 +117,14 @@ public class JwtProvider {
 
             // blacklist 확인
             if (redisTemplate.hasKey(token)) {
-                throw new AuthException(AuthErrorCode.INVALID_TOKEN);
+                throw new BusinessException(ErrorCode.INVALID_TOKEN);
             }
 
             return extractMemberId(token);
         } catch (MalformedJwtException | IllegalArgumentException e) {
-            throw new AuthException(AuthErrorCode.INVALID_TOKEN);
+            throw new BusinessException(ErrorCode.INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
-            throw new AuthException(AuthErrorCode.INVALID_TOKEN);
+            throw new BusinessException(ErrorCode.INVALID_TOKEN);
         }
     }
 
@@ -155,7 +155,7 @@ public class JwtProvider {
         final String id = validateToken(refreshToken);
         final String storedRefreshToken = redisTemplate.opsForValue().get(id);
         if(!Objects.equals(refreshToken, storedRefreshToken)) {
-            throw new AuthException(AuthErrorCode.INVALID_TOKEN);
+            throw new BusinessException(ErrorCode.INVALID_TOKEN);
         }
         return id;
     }

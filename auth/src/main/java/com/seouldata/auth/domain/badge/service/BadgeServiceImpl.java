@@ -6,8 +6,8 @@ import com.seouldata.auth.domain.badge.dto.request.UpdateBadgeReq;
 import com.seouldata.auth.domain.badge.dto.response.GetAllBadgesRes;
 import com.seouldata.auth.domain.badge.entity.Badge;
 import com.seouldata.auth.domain.badge.repository.BadgeRepository;
-import com.seouldata.auth.global.exception.AuthErrorCode;
-import com.seouldata.auth.global.exception.AuthException;
+import com.seouldata.common.exception.BusinessException;
+import com.seouldata.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,10 +48,10 @@ public class BadgeServiceImpl implements BadgeService {
     @Override
     public void updateMyBadge(long memberSeq, UpdateBadgeReq updateMyBadgeReq) {
         Member member = authRepository.findById(memberSeq)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         Badge badge = badgeRepository.findById((long) updateMyBadgeReq.getSeq())
-                .orElseThrow(() -> new AuthException(AuthErrorCode.BADGE_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BADGE_NOT_FOUND));
 
         member.setBadgeSeq(badge);
     }
