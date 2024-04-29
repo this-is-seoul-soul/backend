@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '17'
-	  
+
       - name: Make application.yml
         run: |
          cd auth/src/main/resources
@@ -47,7 +47,7 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
           envs: GITHUB_SHA
           script: |
-           sudo docker rm -f $(docker ps -qa)
+           sudo docker rm -f auth_module
            sudo docker pull ${{ auth-secrets.DOCKER_REPO }}/pyhdotcom
            docker-compose -f docker-compose-auth.yml up -d
            docker image prune -f
