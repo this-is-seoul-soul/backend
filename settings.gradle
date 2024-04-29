@@ -1,5 +1,5 @@
 rootProject.name = 'seouldata'
 
 include 'common'
-//include 'auth'
+include 'auth'
 include 'fest'

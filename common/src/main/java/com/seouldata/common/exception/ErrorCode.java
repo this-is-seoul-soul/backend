@@ -7,6 +7,10 @@ public enum ErrorCode {
 
     // User 관련
     UNAUTHORIZED_USER(403, "권한이 없는 사용자입니다."),
+    INVALID_TOKEN(300, "토큰이 유효하지 않습니다."),
+    USER_NOT_FOUND(300, "사용자를 찾을 수 없습니다."),
+    USER_ALREADY_EXISTS(500, "이미 가입된 사용자입니다."),
+    NICKNAME_ALREADY_EXISTS(500, "이미 사용중인 닉네임입니다."),
 
     // Fest 관련
     FEST_NOT_FOUND(400, "축제 정보가 없습니다."),
@@ -17,7 +21,11 @@ public enum ErrorCode {
     SEARCH_OPTION_INVALID(400, "검색 조건이 잘못되었습니다."),
 
     // Heart 관련
-    HEART_NOT_FOUND(400, "찜한 내역이 없습니다");
+    HEART_NOT_FOUND(400, "찜한 내역이 없습니다"),
+
+    // Badge 관련
+    BADGE_NOT_FOUND(500, "뱃지를 찾을 수 없습니다.")
+    ;
 
 
     private final int code;

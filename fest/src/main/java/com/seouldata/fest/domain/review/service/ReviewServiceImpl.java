@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -63,6 +64,11 @@ public class ReviewServiceImpl implements ReviewService {
                                             .stream()
                                             .map(image -> {
                                                 return image.getImgUrl();
+                                            }).collect(Collectors.toList()))
+                                    .tag(tagRepository.findTagsByMemSeqAndReviewSeq(memSeq, review.getReviewSeq())
+                                            .stream()
+                                            .map(tag -> {
+                                                return tag.getTagNo();
                                             }).collect(Collectors.toList()))
                                     .isMine((memSeq == review.getMemSeq()) ? true : false)
                                     .nickName(creatInfo.getNickname())
@@ -165,7 +171,7 @@ public class ReviewServiceImpl implements ReviewService {
             }
         }
     }
-
+    
     @Override
     public GetTagRes findTag(Long memSeq, Long festSeq) {
         Fest fest = festRepository.findByFestSeq(festSeq)
@@ -196,5 +202,5 @@ public class ReviewServiceImpl implements ReviewService {
                 .tag(tagResList)
                 .build();
     }
-
+    
 }

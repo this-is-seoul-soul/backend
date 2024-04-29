@@ -23,6 +23,8 @@ public class GetReviewRes {
 
     private List<String> imgUrl;
 
+    private List<Integer> tag;
+
     private boolean isMine;
 
 }

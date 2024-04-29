@@ -6,6 +6,8 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -46,5 +48,7 @@ public class GetFestDetailRes {
     private boolean isContinue;
 
     private boolean isHeart;
+
+    private List<TagRes> tag;
 
 }
