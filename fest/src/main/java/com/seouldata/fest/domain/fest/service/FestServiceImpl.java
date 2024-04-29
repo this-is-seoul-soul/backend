@@ -12,9 +12,7 @@ import com.seouldata.fest.domain.fest.entity.Codename;
 import com.seouldata.fest.domain.fest.entity.Fest;
 import com.seouldata.fest.domain.fest.repository.FestRepository;
 import com.seouldata.fest.domain.review.dto.response.GetMemberInfoRes;
-import com.seouldata.fest.domain.review.entity.Review;
 import com.seouldata.fest.domain.review.repository.ReviewRepository;
-import com.seouldata.fest.domain.review.repository.TagRepository;
 import com.seouldata.fest.domain.review.util.InfoUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,7 +35,6 @@ public class FestServiceImpl implements FestService {
 
     private final FestRepository festRepository;
     private final ReviewRepository reviewRepository;
-    private final TagRepository tagRepository;
 
     private final InfoUtil infoUtil;
 
@@ -182,24 +178,6 @@ public class FestServiceImpl implements FestService {
         Double avgPoint = reviewRepository.findPointByFest(fest);
         int cntReview = reviewRepository.countAllByFestAndDeletedIsFalse(fest);
 
-        List<Review> reviewList = reviewRepository.findByFestAndDeletedIsFalse(fest);
-
-        Map<Integer, Integer> tagMap = reviewList.stream()
-                .flatMap(review -> tagRepository.findTagsByReview(review).stream())
-                .collect(Collectors.toMap(
-                        Function.identity(),
-                        tag -> 1,
-                        Integer::sum
-                ));
-
-        List<TagRes> tagResList = tagMap.entrySet().stream()
-                .map(integerIntegerEntry -> TagRes.builder()
-                        .tag(integerIntegerEntry.getKey())
-                        .cnt(integerIntegerEntry.getValue().intValue())
-                        .build())
-                .sorted(Comparator.comparingInt(TagRes::getTag))
-                .collect(Collectors.toList());
-
         return GetFestDetailRes.builder()
                 .festSeq(fest.getFestSeq())
                 .title(fest.getTitle())
@@ -219,7 +197,6 @@ public class FestServiceImpl implements FestService {
                 .cntReview(cntReview)
                 .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
                 .isHeart(festRepository.findHeartByMemSeqAndFestSeq(memSeq, festSeq))
-                .tag(tagResList)
                 .build();
     }
 
