@@ -1,4 +1,4 @@
-package com.seouldata.fest.domain.fest.dto.response;
+package com.seouldata.fest.domain.review.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class TagRes {
+public class TagResDto {
 
     private int tag;
 
