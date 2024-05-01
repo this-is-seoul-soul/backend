@@ -25,6 +25,15 @@ public class FestController {
 
     private final FestService festService;
 
+    @GetMapping("/test")
+    public ResponseEntity<EnvelopResponse> test() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .code(HttpStatus.OK.value())
+                        .data("test")
+                        .build());
+    }
+
     @PostMapping
     public ResponseEntity<EnvelopResponse> addFest(@RequestHeader("memSeq") Long memSeq, @RequestBody @Valid AddFestReq addFestReq) {
 
