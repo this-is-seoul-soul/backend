@@ -44,8 +44,8 @@ public class AuthServiceImpl implements AuthService {
         Member member = Member.builder()
                 .email(joinMemberReq.getEmail())
                 .nickname(joinMemberReq.getNickname())
-                .googleId(joinMemberReq.getGoogleId())
-                .image(saveProfileImage(profile))
+                .googleId(joinMemberReq.getGoogleId() != null ? joinMemberReq.getGoogleId() : null)
+                .image(profile != null ? saveProfileImage(profile) : null)
                 .notification(false)
                 .build();
         Member createdMember = authRepository.save(member);
