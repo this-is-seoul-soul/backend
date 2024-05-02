@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -44,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
         Member member = Member.builder()
                 .email(joinMemberReq.getEmail())
                 .nickname(joinMemberReq.getNickname())
+
                 .googleId(joinMemberReq.getGoogleId() != null ? joinMemberReq.getGoogleId() : null)
                 .image(profile != null ? saveProfileImage(profile) : null)
                 .notification(false)
@@ -106,7 +106,6 @@ public class AuthServiceImpl implements AuthService {
     public void modifyMbti(long memberSeq, ModifyMbtiReq mbti) {
         Member member = authRepository.findById(memberSeq)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-
         member.setMbti(mbti.getMbti());
 
         authRepository.save(member);

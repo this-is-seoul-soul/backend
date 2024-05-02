@@ -1,5 +1,6 @@
 package com.seouldata.common.config;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
