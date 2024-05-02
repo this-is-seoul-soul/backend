@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: develop
   jpa:
     hibernate:
       naming:
@@ -12,16 +12,3 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         show_sql: true
         format_sql: true
-
-logging:
-  level:
-    org:
-      org.hibernate.SQL: DEBUG
-      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-      org.springframework.boot: DEBUG
-      org.springframework.security: DEBUG
-      org.springframework.web: DEBUG
-      apache:
-        tiles: INFO
-    root: INFO
-    com.seouldata.fest: DEBUG

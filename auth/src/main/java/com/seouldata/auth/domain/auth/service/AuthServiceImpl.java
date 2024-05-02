@@ -9,16 +9,15 @@ import com.seouldata.auth.domain.auth.enums.Adjective;
 import com.seouldata.auth.domain.auth.enums.MemberStatus;
 import com.seouldata.auth.domain.auth.enums.Noun;
 import com.seouldata.auth.domain.auth.repository.AuthRepository;
-import com.seouldata.auth.global.exception.AuthErrorCode;
-import com.seouldata.auth.global.exception.AuthException;
 import com.seouldata.auth.global.jwt.JwtProvider;
+import com.seouldata.common.exception.BusinessException;
+import com.seouldata.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -34,18 +33,19 @@ public class AuthServiceImpl implements AuthService {
     public JoinMemberRes join(JoinMemberReq joinMemberReq, MultipartFile profile) throws IOException {
         // email과 nickname 중복 검사
         authRepository.findByEmail(joinMemberReq.getEmail()).ifPresent(member -> {
-            throw new AuthException(AuthErrorCode.USER_ALREADY_EXISTS);
+            throw new BusinessException(ErrorCode.USER_ALREADY_EXISTS);
         });
 
         authRepository.findByNickname(joinMemberReq.getEmail()).ifPresent(member -> {
-            throw new AuthException(AuthErrorCode.NICKNAME_ALREADY_EXISTS);
+            throw new BusinessException(ErrorCode.NICKNAME_ALREADY_EXISTS);
         });
 
         Member member = Member.builder()
                 .email(joinMemberReq.getEmail())
                 .nickname(joinMemberReq.getNickname())
-                .googleId(joinMemberReq.getGoogleId())
-                .image(saveProfileImage(profile))
+
+                .googleId(joinMemberReq.getGoogleId() != null ? joinMemberReq.getGoogleId() : null)
+                .image(profile != null ? saveProfileImage(profile) : null)
                 .notification(false)
                 .build();
         Member createdMember = authRepository.save(member);
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void modifyNickname(long memberSeq, ModifyNicknameReq modifyNicknameReq) {
         Member member = authRepository.findById(memberSeq)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         member.setNickname(modifyNicknameReq.getNickname());
 
@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public GoogleLoginRes googleLogin(String googleId) {
         Member member = authRepository.findByGoogleId(googleId)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         return GoogleLoginRes.builder()
                 .googleId(member.getGoogleId())
@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public GetMemberInfoRes getMemberInfo(long memberSeq) {
         Member member = authRepository.findById(memberSeq)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         return GetMemberInfoRes.builder()
                 .email(member.getEmail())
@@ -95,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public GetReviewWriterInfo getReviewWriterInfo(long memberSeq) {
         Member member = authRepository.findById(memberSeq)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         return GetReviewWriterInfo.builder()
                 .nickname(member.getNickname())
@@ -105,8 +105,7 @@ public class AuthServiceImpl implements AuthService {
 
     public void modifyMbti(long memberSeq, ModifyMbtiReq mbti) {
         Member member = authRepository.findById(memberSeq)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
-
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         member.setMbti(mbti.getMbti());
 
         authRepository.save(member);
@@ -195,7 +194,7 @@ public class AuthServiceImpl implements AuthService {
         long memSeq = Long.parseLong(jwtProvider.extractMemberId(token));
 
         return authRepository.findById(memSeq)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
 }

@@ -52,4 +52,11 @@ public class ReviewController {
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
+    @GetMapping("/tag/{festSeq}")
+    public ResponseEntity<EnvelopResponse> findTag(@RequestHeader("memSeq") Long memSeq, @PathVariable("festSeq") Long festSeq) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().data(reviewService.findTag(memSeq, festSeq)).build());
+    }
+
 }
