@@ -6,9 +6,9 @@ import lombok.Getter;
 public enum ErrorCode {
 
     // User 관련
-    UNAUTHORIZED_USER(403, "권한이 없는 사용자입니다."),
-    INVALID_TOKEN(300, "토큰이 유효하지 않습니다."),
-    USER_NOT_FOUND(300, "사용자를 찾을 수 없습니다."),
+    UNAUTHORIZED_USER(500, "권한이 없는 사용자입니다."),
+    INVALID_TOKEN(500, "토큰이 유효하지 않습니다."),
+    USER_NOT_FOUND(500, "사용자를 찾을 수 없습니다."),
     USER_ALREADY_EXISTS(500, "이미 가입된 사용자입니다."),
     NICKNAME_ALREADY_EXISTS(500, "이미 사용중인 닉네임입니다."),
 
