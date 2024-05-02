@@ -31,19 +31,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JoinMemberRes join(JoinMemberReq joinMemberReq, MultipartFile profile) throws IOException {
-        // email과 nickname 중복 검사
-        authRepository.findByEmail(joinMemberReq.getEmail()).ifPresent(member -> {
-            throw new BusinessException(ErrorCode.USER_ALREADY_EXISTS);
-        });
-
-        authRepository.findByNickname(joinMemberReq.getEmail()).ifPresent(member -> {
-            throw new BusinessException(ErrorCode.NICKNAME_ALREADY_EXISTS);
-        });
-
         Member member = Member.builder()
-                .email(joinMemberReq.getEmail())
-                .nickname(joinMemberReq.getNickname())
-                .googleId(joinMemberReq.getGoogleId() != null ? joinMemberReq.getGoogleId() : null)
+                .email(joinMemberReq.getEmail() != null ? joinMemberReq.getNickname() : null)
+                .nickname(joinMemberReq.getNickname() != null ? joinMemberReq.getNickname() : null)
+                .googleId(joinMemberReq.getGoogleId())
                 .image(profile != null ? saveProfileImage(profile) : null)
                 .notification(false)
                 .build();
@@ -68,12 +59,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public GoogleLoginRes googleLogin(String googleId) {
         Member member = authRepository.findByGoogleId(googleId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+                .orElse(Member.builder()
+                        .googleId(googleId)
+                        .notification(false)
+                        .build());
+
+        Member savedMember = authRepository.save(member);
 
         return GoogleLoginRes.builder()
-                .googleId(member.getGoogleId())
-                .accessToken(generateAccessToken(member.getMemSeq().toString()))
-                .refreshToken(generateRefreshToken(member.getMemSeq().toString()))
+                .googleId(savedMember.getGoogleId())
+                .accessToken(generateAccessToken(savedMember.getMemSeq().toString()))
+                .refreshToken(generateRefreshToken(savedMember.getMemSeq().toString()))
                 .build();
     }
 

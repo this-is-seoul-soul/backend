@@ -24,17 +24,15 @@ public class Member {
     private Long memSeq;
 
     @Column(length = 100)
-    @NotNull
     private String email;
 
     @Column(length = 20)
-    @NotNull
     private String nickname;
 
     @Column(length = 200)
     private String image;
 
-    @Column(length = 30, name = "google_id")
+    @Column(length = 100, name = "google_id")
     private String googleId;
 
     @Column(length = 4)

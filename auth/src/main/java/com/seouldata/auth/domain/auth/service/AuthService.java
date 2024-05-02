@@ -20,7 +20,6 @@ public interface AuthService {
 
     GoogleLoginRes googleLogin(String googleId);
 
-
     GetMemberInfoRes getMemberInfo(long memberSeq);
 
     GetReviewWriterInfo getReviewWriterInfo(long memberSeq);
