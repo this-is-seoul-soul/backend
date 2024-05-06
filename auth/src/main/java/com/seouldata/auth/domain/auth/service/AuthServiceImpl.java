@@ -124,7 +124,7 @@ public class AuthServiceImpl implements AuthService {
     public GetMemberStatusRes checkStatus(String googleId) {
         return authRepository.findByGoogleId(googleId)
                 .map(member -> {
-                    if (member.getNickname().isBlank()) { // 닉네임이 없는 경우
+                    if (member.getNickname() == null || member.getNickname().isBlank()) { // 닉네임이 없는 경우
                         return GetMemberStatusRes.builder()
                                 .status(MemberStatus.NICKNAME.getLabel())
                                 .build();
