@@ -7,6 +7,7 @@ import com.seouldata.auth.domain.auth.dto.response.GetMemberSeqInfoRes;
 import com.seouldata.auth.domain.auth.service.AuthService;
 import com.seouldata.auth.global.annotation.Authorization;
 import com.seouldata.common.response.EnvelopResponse;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -151,11 +152,12 @@ public class AuthController {
 
     @GetMapping("/status")
     public ResponseEntity<EnvelopResponse> checkStatus(
-            @RequestParam(value = "googleId") String googleId
+            @RequestHeader("Authorization") @Nullable String token,
+            @RequestParam(value = "googleId") @Nullable String googleId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder()
-                        .data(authService.checkStatus(googleId))
+                        .data(authService.checkStatus(token, googleId))
                         .build()
                 );
     }

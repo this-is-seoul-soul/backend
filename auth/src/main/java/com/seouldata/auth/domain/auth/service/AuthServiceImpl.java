@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -121,8 +122,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public GetMemberStatusRes checkStatus(String googleId) {
-        return authRepository.findByGoogleId(googleId)
+    public GetMemberStatusRes checkStatus(String token, String googleId) {
+        Optional<Member> foundMember = Optional.empty();
+        if (token == null) {
+            foundMember = authRepository.findByGoogleId(googleId);
+        } else {
+            foundMember = Optional.of(findMemberByToken(token));
+        }
+
+        return foundMember
                 .map(member -> {
                     if (member.getNickname() == null || member.getNickname().isBlank()) { // 닉네임이 없는 경우
                         return GetMemberStatusRes.builder()
