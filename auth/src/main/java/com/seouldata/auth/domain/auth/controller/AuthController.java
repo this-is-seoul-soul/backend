@@ -3,6 +3,7 @@ package com.seouldata.auth.domain.auth.controller;
 import com.seouldata.auth.domain.auth.dto.request.JoinMemberReq;
 import com.seouldata.auth.domain.auth.dto.request.ModifyMbtiReq;
 import com.seouldata.auth.domain.auth.dto.request.ModifyNicknameReq;
+import com.seouldata.auth.domain.auth.dto.response.GetMemberSeqInfoRes;
 import com.seouldata.auth.domain.auth.service.AuthService;
 import com.seouldata.auth.global.annotation.Authorization;
 import com.seouldata.common.response.EnvelopResponse;
@@ -155,6 +156,19 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder()
                         .data(authService.checkStatus(googleId))
+                        .build()
+                );
+    }
+
+    @GetMapping("/memInfo")
+    public ResponseEntity<EnvelopResponse> getMemInfo(
+            @Authorization long memSeq
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(GetMemberSeqInfoRes.builder()
+                                .memberSeq(memSeq)
+                                .build())
                         .build()
                 );
     }
