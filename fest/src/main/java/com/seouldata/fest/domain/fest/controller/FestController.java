@@ -84,22 +84,7 @@ public class FestController {
     }
 
     @GetMapping("/search/map")
-    public ResponseEntity<EnvelopResponse> getFestByCriteria(@RequestHeader("memSeq") Long memSeq,
-                                                             @RequestParam("lot") @NotNull double lot,
-                                                             @RequestParam("lat") @NotNull double lat,
-                                                             @RequestParam("distance") @NotNull int distance,
-                                                             @ValidFilterValues @RequestParam(value = "filter", required = false) List<String> filter,
-                                                             @ValidYear @RequestParam(value = "year", required = false) List<Integer> year,
-                                                             @ValidCodeName @RequestParam(value = "codeName", required = false) List<String> codeName) {
-
-        FindFestByCriteriaReq findFestByCriteriaReq = FindFestByCriteriaReq.builder()
-                .lot(lot)
-                .lat(lat)
-                .distance(distance)
-                .filter(filter)
-                .year(year)
-                .codename(codeName)
-                .build();
+    public ResponseEntity<EnvelopResponse> getFestByCriteria(@RequestHeader("memSeq") Long memSeq, @RequestBody FindFestByCriteriaReq findFestByCriteriaReq) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder().data(festService.getFestByCriteria(memSeq, findFestByCriteriaReq)).code(HttpStatus.OK.value()).build());
