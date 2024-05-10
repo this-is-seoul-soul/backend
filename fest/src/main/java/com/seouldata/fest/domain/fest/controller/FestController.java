@@ -9,6 +9,7 @@ import com.seouldata.fest.domain.fest.dto.request.FindByCodeReq;
 import com.seouldata.fest.domain.fest.dto.request.FindFestByCriteriaReq;
 import com.seouldata.fest.domain.fest.dto.request.ModifyFestReq;
 import com.seouldata.fest.domain.fest.service.FestService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -26,41 +27,41 @@ public class FestController {
     private final FestService festService;
 
     @PostMapping
-    public ResponseEntity<EnvelopResponse> addFest(@RequestHeader("memSeq") Long memSeq, @RequestBody @Valid AddFestReq addFestReq) {
+    public ResponseEntity<EnvelopResponse> addFest(HttpServletRequest request, @RequestBody @Valid AddFestReq addFestReq) {
 
-        festService.addFest(memSeq, addFestReq);
+        festService.addFest((Long) request.getAttribute("memSeq"), addFestReq);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(EnvelopResponse.builder().code(HttpStatus.CREATED.value()).build());
     }
 
     @PutMapping
-    public ResponseEntity<EnvelopResponse> modifyFest(@RequestHeader("memSeq") Long memSeq, @RequestBody @Valid ModifyFestReq modifyFestReq) {
+    public ResponseEntity<EnvelopResponse> modifyFest(HttpServletRequest request, @RequestBody @Valid ModifyFestReq modifyFestReq) {
 
-        festService.updateFest(memSeq, modifyFestReq);
+        festService.updateFest((Long) request.getAttribute("memSeq"), modifyFestReq);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
     @DeleteMapping
-    public ResponseEntity<EnvelopResponse> removeFest(@RequestHeader("memSeq") Long memSeq, @RequestParam("festSeq") Long festSeq) {
+    public ResponseEntity<EnvelopResponse> removeFest(HttpServletRequest request, @RequestParam("festSeq") Long festSeq) {
 
-        festService.removeFest(memSeq, festSeq);
+        festService.removeFest((Long) request.getAttribute("memSeq"), festSeq);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
     @GetMapping("/search/detail")
-    public ResponseEntity<EnvelopResponse> getFestDetail(@RequestHeader("memSeq") Long memSeq, @RequestParam("festSeq") Long festSeq) {
+    public ResponseEntity<EnvelopResponse> getFestDetail(HttpServletRequest request, @RequestParam("festSeq") Long festSeq) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(festService.getFestDetail(memSeq, festSeq)).code(HttpStatus.OK.value()).build());
+                .body(EnvelopResponse.builder().data(festService.getFestDetail((Long) request.getAttribute("memSeq"), festSeq)).code(HttpStatus.OK.value()).build());
     }
 
     @GetMapping("/search")
-    public ResponseEntity<EnvelopResponse> getFestByCode(@RequestHeader("memSeq") Long memSeq,
+    public ResponseEntity<EnvelopResponse> getFestByCode(HttpServletRequest request,
                                                          @RequestParam("codename") String codename,
                                                          @RequestParam("isFree") boolean isFree,
                                                          @RequestParam("isContinue") boolean isContinue,
@@ -80,11 +81,11 @@ public class FestController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(festService.getFestByCode(memSeq, findByCodeReq)).code(HttpStatus.OK.value()).build());
+                .body(EnvelopResponse.builder().data(festService.getFestByCode((Long) request.getAttribute("memSeq"), findByCodeReq)).code(HttpStatus.OK.value()).build());
     }
 
     @GetMapping("/search/map")
-    public ResponseEntity<EnvelopResponse> getFestByCriteria(@RequestHeader("memSeq") Long memSeq,
+    public ResponseEntity<EnvelopResponse> getFestByCriteria(HttpServletRequest request,
                                                              @RequestParam("lot") @NotNull double lot,
                                                              @RequestParam("lat") @NotNull double lat,
                                                              @RequestParam("distance") @NotNull int distance,
@@ -102,21 +103,21 @@ public class FestController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(festService.getFestByCriteria(memSeq, findFestByCriteriaReq)).code(HttpStatus.OK.value()).build());
+                .body(EnvelopResponse.builder().data(festService.getFestByCriteria((Long) request.getAttribute("memSeq"), findFestByCriteriaReq)).code(HttpStatus.OK.value()).build());
     }
 
     @GetMapping
-    public ResponseEntity<EnvelopResponse> getFestList(@RequestHeader("memSeq") Long memSeq, @RequestParam("keyword") String keyword, @RequestParam("lot") double lot, @RequestParam("lat") double lat) {
+    public ResponseEntity<EnvelopResponse> getFestList(HttpServletRequest request, @RequestParam("keyword") String keyword, @RequestParam("lot") double lot, @RequestParam("lat") double lat) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(festService.getFestList(memSeq, keyword, lot, lat)).code(HttpStatus.OK.value()).build());
+                .body(EnvelopResponse.builder().data(festService.getFestList((Long) request.getAttribute("memSeq"), keyword, lot, lat)).code(HttpStatus.OK.value()).build());
     }
 
     @GetMapping("/recommend")
-    public ResponseEntity<EnvelopResponse> getRecommendFest(@RequestHeader("memSeq") Long memSeq) {
+    public ResponseEntity<EnvelopResponse> getRecommendFest(HttpServletRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(festService.getRecommendFest(memSeq)).code(HttpStatus.OK.value()).build());
+                .body(EnvelopResponse.builder().data(festService.getRecommendFest((Long) request.getAttribute("memSeq"))).code(HttpStatus.OK.value()).build());
     }
 
 }
