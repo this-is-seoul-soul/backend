@@ -164,7 +164,7 @@ public class AuthController {
 
     @GetMapping("/memInfo")
     public ResponseEntity<EnvelopResponse> getMemInfo(
-            @Authorization long memSeq
+            @Authorization Long memSeq
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder()
