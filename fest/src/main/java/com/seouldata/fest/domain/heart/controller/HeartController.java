@@ -2,6 +2,7 @@ package com.seouldata.fest.domain.heart.controller;
 
 import com.seouldata.common.response.EnvelopResponse;
 import com.seouldata.fest.domain.heart.service.HeartService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +16,16 @@ public class HeartController {
     private final HeartService heartService;
 
     @PostMapping("/{festSeq}")
-    public ResponseEntity<EnvelopResponse> addHeart(@RequestHeader("memSeq") Long memSeq, @PathVariable("festSeq") Long festSeq) {
+    public ResponseEntity<EnvelopResponse> addHeart(HttpServletRequest request, @PathVariable("festSeq") Long festSeq) {
 
-        heartService.addHeart(memSeq, festSeq);
+        heartService.addHeart((Long) request.getAttribute("memSeq"), festSeq);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(EnvelopResponse.builder().code(HttpStatus.CREATED.value()).build());
     }
 
     @DeleteMapping("/{heartSeq}")
-    public ResponseEntity<EnvelopResponse> removeHeart(@RequestHeader("memSeq") Long memSeq, @PathVariable("heartSeq") Long heartSeq) {
+    public ResponseEntity<EnvelopResponse> removeHeart(HttpServletRequest request, @PathVariable("heartSeq") Long heartSeq) {
 
         heartService.removeHeart(heartSeq);
 
@@ -33,10 +34,10 @@ public class HeartController {
     }
 
     @GetMapping
-    public ResponseEntity<EnvelopResponse> getHeart(@RequestHeader("memSeq") Long memSeq) {
+    public ResponseEntity<EnvelopResponse> getHeart(HttpServletRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(heartService.getHeart(memSeq)).code(HttpStatus.OK.value()).build());
+                .body(EnvelopResponse.builder().data(heartService.getHeart((Long) request.getAttribute("memSeq"))).code(HttpStatus.OK.value()).build());
     }
 
 }
