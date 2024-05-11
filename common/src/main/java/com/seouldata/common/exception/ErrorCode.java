@@ -16,6 +16,7 @@ public enum ErrorCode {
     FEST_NOT_FOUND(400, "축제 정보가 없습니다."),
     INVALID_CODE_NAME(400, "유효하지 않은 코드명입니다."),
     FAIL_MEMBER_INFO(400, "해당 유저의 정보를 받아오지 못했습니다."),
+    TOKEN_NOT_EXIST(400, "토큰이 존재하지 않습니다."),
 
     // Review 관련
     REVIEW_NOT_FOUND(400, "해당 리뷰가 없습니다."),

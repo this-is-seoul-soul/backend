@@ -17,7 +17,11 @@ public class AccessTokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = request.getHeader("Authorization");
 
-        if (accessToken != null && accessToken.contains("Bearer")) {
+        if (accessToken == null) {
+            throw new BusinessException(ErrorCode.TOKEN_NOT_EXIST);
+        }
+
+        if (accessToken.contains("Bearer")) {
             accessToken = accessToken.split(" ")[1];
         }
 
