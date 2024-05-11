@@ -15,7 +15,7 @@ public enum ErrorCode {
     // Fest 관련
     FEST_NOT_FOUND(400, "축제 정보가 없습니다."),
     INVALID_CODE_NAME(400, "유효하지 않은 코드명입니다."),
-    FAIL_MEMBER_INFO(400, "memSeq를 받아오지 못했습니다."),
+    FAIL_MEMBER_INFO(400, "해당 유저의 정보를 받아오지 못했습니다."),
 
     // Review 관련
     REVIEW_NOT_FOUND(400, "해당 리뷰가 없습니다."),

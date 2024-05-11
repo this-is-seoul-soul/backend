@@ -244,27 +244,7 @@ public class FestServiceImpl implements FestService {
         else
             festList = festRepository.findByKeywordAndLocation(keyword, lot, lat);
 
-        return festList.stream()
-                .map(fest -> {
-
-                    Double avgPoint = reviewRepository.findPointByFest(fest);
-                    int cntReview = reviewRepository.countAllByFestAndDeletedIsFalse(fest);
-
-                    return GetFestRes.builder()
-                            .festSeq(fest.getFestSeq())
-                            .title(fest.getTitle())
-                            .codename(Codename.getCodeType(fest.getCodename()))
-                            .mainImg(fest.getMainImg())
-                            .startDate(fest.getStartDate())
-                            .endDate(fest.getEndDate())
-                            .useFee(fest.getUseFee())
-                            .avgPoint(avgPoint == null ? 0.0 : avgPoint)
-                            .cntReview(cntReview)
-                            .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
-                            .isHeart(festRepository.findHeartByMemSeqAndFestSeq(memSeq, fest.getFestSeq()))
-                            .build();
-                })
-                .collect(Collectors.toList());
+        return makeGetFestRes(memSeq, festList);
     }
 
     @Override
@@ -319,6 +299,38 @@ public class FestServiceImpl implements FestService {
                             .build();
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GetFestRes> getMyFest(Long memSeq) {
+
+        List<Fest> myFestList = festRepository.findByCreator(memSeq);
+
+        return makeGetFestRes(memSeq, myFestList);
+    }
+
+    private List<GetFestRes> makeGetFestRes(Long memSeq, List<Fest> myFestList) {
+        return myFestList.stream().map(
+                fest -> {
+
+                    Double avgPoint = reviewRepository.findPointByFest(fest);
+                    int cntReview = reviewRepository.countAllByFestAndDeletedIsFalse(fest);
+
+                    return GetFestRes.builder()
+                            .festSeq(fest.getFestSeq())
+                            .title(fest.getTitle())
+                            .codename(Codename.getCodeType(fest.getCodename()))
+                            .mainImg(fest.getMainImg())
+                            .startDate(fest.getStartDate())
+                            .endDate(fest.getEndDate())
+                            .useFee(fest.getUseFee())
+                            .avgPoint(avgPoint == null ? 0.0 : avgPoint)
+                            .cntReview(cntReview)
+                            .isContinue(fest.getStartDate().isBefore(LocalDateTime.now()) && fest.getEndDate().isAfter(LocalDateTime.now()))
+                            .isHeart(festRepository.findHeartByMemSeqAndFestSeq(memSeq, fest.getFestSeq()))
+                            .build();
+                }
+        ).collect(Collectors.toList());
     }
 
 }

@@ -129,4 +129,11 @@ public class FestController {
                 .body(EnvelopResponse.builder().data(festService.getRecommendFest((Long) request.getAttribute("memSeq"))).code(HttpStatus.OK.value()).build());
     }
 
+    @GetMapping("/mine")
+    public ResponseEntity<EnvelopResponse> getMyFest(HttpServletRequest request) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().data(festService.getMyFest((Long) request.getAttribute("memSeq"))).build());
+    }
+
 }

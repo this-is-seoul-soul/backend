@@ -202,5 +202,34 @@ public class ReviewServiceImpl implements ReviewService {
                 .tag(tagResList)
                 .build();
     }
-    
+
+    @Override
+    public List<GetReviewRes> findMyReview(Long memSeq) {
+
+        List<Review> reviewList = reviewRepository.findByMemSeqAndDeletedIsFalse(memSeq);
+        GetMemberInfoRes createInfo = infoUtil.getMemberInfo(memSeq);
+
+        return reviewList.stream().map(review -> {
+
+            return GetReviewRes.builder()
+                    .reviewSeq(review.getReviewSeq())
+                    .content(review.getContent())
+                    .point(review.getPoint())
+                    .imgUrl(imageRepository.findImagesByReviewSeq(review.getReviewSeq())
+                            .stream()
+                            .map(image -> {
+                                return image.getImgUrl();
+                            }).collect(Collectors.toList()))
+                    .tag(tagRepository.findTagsByMemSeqAndReviewSeq(memSeq, review.getReviewSeq())
+                            .stream()
+                            .map(tag -> {
+                                return tag.getTagNo();
+                            }).collect(Collectors.toList()))
+                    .isMine(true)
+                    .nickName(createInfo.getNickname())
+                    .mbti(createInfo.getMbti())
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
 }
