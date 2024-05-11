@@ -4,6 +4,7 @@ import com.seouldata.common.response.EnvelopResponse;
 import com.seouldata.fest.domain.review.dto.request.AddReviewReq;
 import com.seouldata.fest.domain.review.dto.request.ModifyReviewReq;
 import com.seouldata.fest.domain.review.service.ReviewService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,45 +19,45 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public ResponseEntity<EnvelopResponse> findReview(@RequestHeader("memSeq") Long memSeq, @RequestParam("festSeq") Long festSeq,
+    public ResponseEntity<EnvelopResponse> findReview(HttpServletRequest request, @RequestParam("festSeq") Long festSeq,
                                                       @RequestParam("sort") int sort, @RequestParam("page") int page, @RequestParam("limit") int limit) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(reviewService.findReview(memSeq, festSeq, sort, page, limit)).build());
+                .body(EnvelopResponse.builder().data(reviewService.findReview((Long) request.getAttribute("memSeq"), festSeq, sort, page, limit)).build());
     }
 
     @PostMapping
-    public ResponseEntity<EnvelopResponse> addReview(@RequestHeader("memSeq") Long memSeq, @RequestBody @Valid AddReviewReq addReviewReq) {
+    public ResponseEntity<EnvelopResponse> addReview(HttpServletRequest request, @RequestBody @Valid AddReviewReq addReviewReq) {
 
-        reviewService.addReview(memSeq, addReviewReq);
+        reviewService.addReview((Long) request.getAttribute("memSeq"), addReviewReq);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(EnvelopResponse.builder().code(HttpStatus.CREATED.value()).build());
     }
 
     @PatchMapping
-    public ResponseEntity<EnvelopResponse> modifyReview(@RequestHeader("memSeq") Long memSeq, @RequestBody @Valid ModifyReviewReq modifyReviewReq) {
+    public ResponseEntity<EnvelopResponse> modifyReview(HttpServletRequest request, @RequestBody @Valid ModifyReviewReq modifyReviewReq) {
 
-        reviewService.modifyReview(memSeq, modifyReviewReq);
+        reviewService.modifyReview((Long) request.getAttribute("memSeq"), modifyReviewReq);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
     @DeleteMapping("/{reviewSeq}")
-    public ResponseEntity<EnvelopResponse> removeReview(@RequestHeader("memSeq") Long memSeq, @PathVariable("reviewSeq") Long reviewSeq) {
+    public ResponseEntity<EnvelopResponse> removeReview(HttpServletRequest request, @PathVariable("reviewSeq") Long reviewSeq) {
 
-        reviewService.removeReview(memSeq, reviewSeq);
+        reviewService.removeReview((Long) request.getAttribute("memSeq"), reviewSeq);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());
     }
 
     @GetMapping("/tag/{festSeq}")
-    public ResponseEntity<EnvelopResponse> findTag(@RequestHeader("memSeq") Long memSeq, @PathVariable("festSeq") Long festSeq) {
+    public ResponseEntity<EnvelopResponse> findTag(HttpServletRequest request, @PathVariable("festSeq") Long festSeq) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EnvelopResponse.builder().data(reviewService.findTag(memSeq, festSeq)).build());
+                .body(EnvelopResponse.builder().data(reviewService.findTag((Long) request.getAttribute("memSeq"), festSeq)).build());
     }
 
 }
