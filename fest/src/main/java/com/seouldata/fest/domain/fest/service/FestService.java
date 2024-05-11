@@ -30,4 +30,6 @@ public interface FestService {
 
     List<GetFestDetailRes> getRecommendFest(Long memSeq);
 
+    List<GetFestRes> getMyFest(Long memSeq);
+
 }

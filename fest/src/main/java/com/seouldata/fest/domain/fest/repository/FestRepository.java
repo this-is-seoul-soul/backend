@@ -29,4 +29,7 @@ public interface FestRepository extends JpaRepository<Fest, Long>, FestRepositor
 
     List<Fest> findTop10ByCodenameInOrderByFestSeqDesc(List<Integer> festCoodenumList);
 
+    @Query(value = "select f from Fest f where f.creator = :memSeq and f.isDeleted = false")
+    List<Fest> findByCreator(@Param("memSeq") Long memSeq);
+
 }
