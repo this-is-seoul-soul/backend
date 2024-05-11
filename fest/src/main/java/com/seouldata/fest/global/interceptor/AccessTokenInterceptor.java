@@ -1,5 +1,7 @@
 package com.seouldata.fest.global.interceptor;
 
+import com.seouldata.common.exception.BusinessException;
+import com.seouldata.common.exception.ErrorCode;
 import com.seouldata.common.response.EnvelopResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +20,10 @@ public class AccessTokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = request.getHeader("Authorization");
+
+        if (accessToken.contains("Bearer")) {
+            accessToken = accessToken.split(" ")[1];
+        }
 
         Long memSeq = convertAccessToken(accessToken);
         request.setAttribute("memSeq", memSeq);
@@ -47,8 +53,7 @@ public class AccessTokenInterceptor implements HandlerInterceptor {
             res = res.substring(11);
             return Long.parseLong(res);
         } else {
-            log.info("fest에서 memSeq 바꾸기 실패!!!!!!!!!!!!!!");
-            return null;
+            throw new BusinessException(ErrorCode.FAIL_MEMBER_INFO);
         }
     }
 
