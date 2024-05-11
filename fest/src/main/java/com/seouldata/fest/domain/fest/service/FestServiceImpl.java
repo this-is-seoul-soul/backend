@@ -106,7 +106,7 @@ public class FestServiceImpl implements FestService {
         festRepository.save(
                 Fest.builder()
                         .title(addFestReq.getTitle())
-                        .codename(Codename.getCodeNum(addFestReq.getCodeName()))
+                        .codename(Codename.getCodeNum(addFestReq.getCodename()))
                         .guname(addFestReq.getGuName())
                         .place(addFestReq.getPlace())
                         .useTrgt(addFestReq.getUseTrgt())
@@ -134,7 +134,7 @@ public class FestServiceImpl implements FestService {
         if (!Objects.equals(memSeq, fest.getCreator()))
             throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
 
-        int codename = Codename.getCodeNum(modifyFestReq.getCodeName());
+        int codename = Codename.getCodeNum(modifyFestReq.getCodename());
         if (codename == -1)
             throw new BusinessException(ErrorCode.INVALID_CODE_NAME);
 

@@ -100,7 +100,7 @@ public class FestController {
                                                              @RequestParam("distance") @NotNull int distance,
                                                              @ValidFilterValues @RequestParam(value = "filter", required = false) List<String> filter,
                                                              @ValidYear @RequestParam(value = "year", required = false) List<Integer> year,
-                                                             @ValidCodeName @RequestParam(value = "codeName", required = false) List<String> codeName) {
+                                                             @ValidCodeName @RequestParam(value = "codename", required = false) List<String> codename) {
 
         FindFestByCriteriaReq findFestByCriteriaReq = FindFestByCriteriaReq.builder()
                 .lot(lot)
@@ -108,7 +108,7 @@ public class FestController {
                 .distance(distance)
                 .filter(filter)
                 .year(year)
-                .codename(codeName)
+                .codename(codename)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK)

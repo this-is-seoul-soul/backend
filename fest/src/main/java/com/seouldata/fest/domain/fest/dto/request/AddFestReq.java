@@ -21,7 +21,7 @@ public class AddFestReq {
     private String title;
 
     @NotBlank
-    private String codeName;
+    private String codename;
 
     @NotBlank
     @Length(max = 4)
