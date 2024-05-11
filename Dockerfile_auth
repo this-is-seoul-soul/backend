@@ -19,7 +19,7 @@ WORKDIR /app
 COPY . .
 
 # auth 모듈을 빌드
-RUN cd auth && gradle build
+RUN gradle build
 
 # 빌드된 JAR 파일을 실행
 CMD ["java", "-jar", "/app/auth/build/libs/auth-0.0.1.jar"]

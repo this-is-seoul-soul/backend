@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  auth:
+    container_name: auth_module
+    image: seoulsoul_auth
+    ports:
+      - 8081:8081
+    networks:
+      - deploy
+    environment:
+      - TZ=Asia/Seoul
+networks:
+  deploy:
+    external: true

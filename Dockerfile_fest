@@ -23,4 +23,3 @@ RUN cd fest && gradle build
 
 # 빌드된 JAR 파일을 실행
 CMD ["java", "-jar", "/app/fest/build/libs/fest-0.0.1.jar"]
-
