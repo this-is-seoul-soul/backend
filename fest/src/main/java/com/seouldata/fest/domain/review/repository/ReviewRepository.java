@@ -30,4 +30,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
     @Query(value = "select r from Review r where r.fest = :fest and r.isDeleted = false")
     List<Review> findByFestAndDeletedIsFalse(@Param("fest") Fest fest);
 
+    @Query(value = "select r from Review r where r.memSeq = :memSeq and r.isDeleted = false")
+    List<Review> findByMemSeqAndDeletedIsFalse(@Param("memSeq") Long memSeq);
+
 }

@@ -60,4 +60,11 @@ public class ReviewController {
                 .body(EnvelopResponse.builder().data(reviewService.findTag((Long) request.getAttribute("memSeq"), festSeq)).build());
     }
 
+    @GetMapping("/mine")
+    public ResponseEntity<EnvelopResponse> findMyReview(HttpServletRequest request) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder().data(reviewService.findMyReview((Long) request.getAttribute("memSeq"))).build());
+    }
+
 }

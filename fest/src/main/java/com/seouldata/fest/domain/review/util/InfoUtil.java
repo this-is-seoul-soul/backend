@@ -1,5 +1,7 @@
 package com.seouldata.fest.domain.review.util;
 
+import com.seouldata.common.exception.BusinessException;
+import com.seouldata.common.exception.ErrorCode;
 import com.seouldata.fest.domain.review.dto.response.GetMemberInfoRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,12 +18,18 @@ public class InfoUtil {
     public GetMemberInfoRes getMemberInfo(Long memSeq) {
         WebClient webClient = WebClient.create(memberServerUrl);
 
-        GetMemberInfoRes info = webClient.get()
-                .uri("/member/creatInfo")
-                .header("memSeq", String.valueOf(memSeq))
-                .retrieve()
-                .bodyToMono(GetMemberInfoRes.class)
-                .block();
+        GetMemberInfoRes info = null;
+
+        try {
+            info = webClient.get()
+                    .uri("/member/creatInfo")
+                    .header("memSeq", String.valueOf(memSeq))
+                    .retrieve()
+                    .bodyToMono(GetMemberInfoRes.class)
+                    .block();
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.FAIL_MEMBER_INFO);
+        }
 
         return info;
     }
