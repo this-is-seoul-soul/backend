@@ -1,0 +1,54 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Clone Repository') {
+      steps{
+        echo "Clone repostiroy"
+        git branch: "dev-fest", url: "https://github.com/this-is-seoul-soul/backend", credentialsId: 'github_token'
+      }
+    }
+
+    stage('Building image') {
+     steps {
+      script {
+        sh 'pwd'
+        sh 'cp /var/jenkins_home/util/fest_module/application-develop.yml ./fest/src/main/resources/'
+        sh "docker build -f ./Dockerfile_fest -t seoulsoul_fest ."
+       }
+     }
+    }
+
+    stage('Docker build') {
+     steps {
+      echo "docker compose build"
+      sh "docker-compose -f ./fest/docker-compose.yml build --no-cache"
+     }
+     post {
+      success {
+       echo "Success to build"
+      }
+      failure {
+       echo "Docker build failed. clear unused file"
+       sh "docker system prune -f"
+       error 'pipeline aborted'
+     }
+    }
+   }
+
+    stage("Docker up") {
+      steps {
+        echo "Docker compose up"
+        sh "docker stop fest_module"
+        sh "docker rm fest_module"
+        sh "docker-compose -f ./fest/docker-compose.yml up -d"
+      }
+    }
+
+    stage("Docker clear") {
+      steps {
+        sh "docker system prune -f"
+      }
+    }
+  }
+}

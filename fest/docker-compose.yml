@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  auth:
+    container_name: fest_module
+    image: seoulsoul_fest
+    ports:
+      - 8082:8082
+    networks:
+      - deploy
+    environment:
+      - TZ=Asia/Seoul
+networks:
+  deploy:
+    external: true
