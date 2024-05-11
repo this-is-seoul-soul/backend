@@ -2,36 +2,49 @@ package com.seouldata.fest.domain.review.util;
 
 import com.seouldata.common.exception.BusinessException;
 import com.seouldata.common.exception.ErrorCode;
+import com.seouldata.common.response.EnvelopResponse;
 import com.seouldata.fest.domain.review.dto.response.GetMemberInfoRes;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+
 
 @Component
 @RequiredArgsConstructor
 public class InfoUtil {
 
-    @Value("${member.server.url}")
-    private String memberServerUrl;
-
     public GetMemberInfoRes getMemberInfo(Long memSeq) {
-        WebClient webClient = WebClient.create(memberServerUrl);
+        RestTemplate restTemplate = new RestTemplate();
 
-        GetMemberInfoRes info = null;
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("https://seoulsoul.site/member/createInfo")
+                .queryParam("memSeq", memSeq);
 
-        try {
-            info = webClient.get()
-                    .uri("/member/creatInfo")
-                    .header("memSeq", String.valueOf(memSeq))
-                    .retrieve()
-                    .bodyToMono(GetMemberInfoRes.class)
-                    .block();
-        } catch (Exception e) {
-            throw new BusinessException(ErrorCode.FAIL_MEMBER_INFO);
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        URI uri = builder.build().toUri();
+        ResponseEntity<EnvelopResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET,
+                entity,
+                EnvelopResponse.class
+        );
+
+        System.out.println(responseEntity.getBody().getData());
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            String res = responseEntity.getBody().getData().toString();
+            res = res.replaceAll("[{}]", "");
+            String nickname = res.split(",")[0].split("=")[1];
+            String mbti = res.split(",")[1].split("=")[1];
+            return GetMemberInfoRes.builder().mbti(mbti).nickname(nickname).build();
         }
 
-        return info;
+        throw new BusinessException(ErrorCode.FAIL_MEMBER_INFO);
     }
 
 }
