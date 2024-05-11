@@ -6,7 +6,6 @@ import com.seouldata.common.response.EnvelopResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -14,14 +13,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Slf4j
 public class AccessTokenInterceptor implements HandlerInterceptor {
 
-    @Value("${member.server.url}")
-    private String memberServerUrl;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = request.getHeader("Authorization");
 
-        if (accessToken.contains("Bearer")) {
+        if (accessToken != null && accessToken.contains("Bearer")) {
             accessToken = accessToken.split(" ")[1];
         }
 
