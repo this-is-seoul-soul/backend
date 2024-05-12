@@ -24,6 +24,7 @@ public enum ErrorCode {
 
     // Heart 관련
     HEART_NOT_FOUND(400, "찜한 내역이 없습니다"),
+    HEART_ALREADY_EXIST(400, "이미 찜한 행사입니다."),
 
     // Badge 관련
     BADGE_NOT_FOUND(500, "뱃지를 찾을 수 없습니다.")
