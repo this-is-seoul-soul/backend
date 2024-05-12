@@ -65,6 +65,7 @@ public class HeartServiceImpl implements HeartService{
                 .map(fest -> {
                     LocalDateTime today = LocalDateTime.now();
                     boolean isContinue = !fest.getStartDate().isAfter(today) && !fest.getEndDate().isBefore(today);
+                    Double avgPoint = reviewRepository.findPointByMemSeqAndFest(memSeq, fest);
                     return GetHeartRes.builder()
                             .festSeq(fest.getFestSeq())
                             .title(fest.getTitle())
@@ -73,7 +74,7 @@ public class HeartServiceImpl implements HeartService{
                             .startDate(fest.getStartDate())
                             .endDate(fest.getEndDate())
                             .useFee(fest.getUseFee())
-                            .avgPoint(reviewRepository.findPointByMemSeqAndFest(memSeq, fest).doubleValue())
+                            .avgPoint(avgPoint == null ? 0.0 : avgPoint)
                             .cntReview(reviewRepository.countAllByMemSeqAndFestAndDeletedIsFalse(memSeq, fest))
                             .isContinue(isContinue)
                             .isHeart(true)
