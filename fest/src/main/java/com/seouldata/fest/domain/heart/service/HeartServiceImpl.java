@@ -41,9 +41,12 @@ public class HeartServiceImpl implements HeartService{
     }
 
     @Override
-    public void removeHeart(Long heartSeq) {
+    public void removeHeart(Long memSeq, Long festSeq) {
 
-        Heart heart = heartRepository.findByHeartSeq(heartSeq)
+        Fest fest = festRepository.findByFestSeq(festSeq)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
+
+        Heart heart = heartRepository.findByMemSeqAndFest(memSeq, fest)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HEART_NOT_FOUND));
 
         heartRepository.delete(heart);

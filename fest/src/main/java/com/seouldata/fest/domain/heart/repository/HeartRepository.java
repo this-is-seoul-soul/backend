@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface HeartRepository extends JpaRepository<Heart, Long> {
 
-    Optional<Heart> findByHeartSeq(Long heartSeq);
+    Optional<Heart> findByMemSeqAndFest(Long memSeq, Fest fest);
 
     @Query(value = "select f from Heart h left join Fest f on h.fest.festSeq = f.festSeq where h.memSeq = :memSeq")
     List<Fest> findFestByMemSeq(@Param("memSeq") Long memSeq);
