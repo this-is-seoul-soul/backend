@@ -27,15 +27,18 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthRepository authRepository;
     private final AwsService awsService;
+    private final GoogleService googleService;
 
     private final JwtProvider jwtProvider;
 
     @Override
     public JoinMemberRes join(JoinMemberReq joinMemberReq, MultipartFile profile) throws IOException {
+        String googleId = googleService.getGoogleAccessToken(joinMemberReq.getGoogleId());
+
         Member member = Member.builder()
                 .email(joinMemberReq.getEmail() != null ? joinMemberReq.getNickname() : null)
                 .nickname(joinMemberReq.getNickname() != null ? joinMemberReq.getNickname() : null)
-                .googleId(joinMemberReq.getGoogleId())
+                .googleId(googleId)
                 .image(profile != null ? saveProfileImage(profile) : null)
                 .notification(false)
                 .build();
@@ -59,9 +62,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public GoogleLoginRes googleLogin(String googleId) {
-        Member member = authRepository.findByGoogleId(googleId)
+        String accessToken = googleService.getGoogleAccessToken(googleId);
+        log.debug("accessToken: {}", accessToken);
+
+        GetGoogleUserInfoRes googleUser = googleService.getUserInfo(accessToken);
+        log.debug("googleUser: {}", googleUser);
+
+        Member member = authRepository.findByGoogleId(googleUser.getId())
                 .orElse(Member.builder()
-                        .googleId(googleId)
+                        .googleId(googleUser.getId())
+                        .email(googleUser.getEmail())
                         .notification(false)
                         .build());
 
