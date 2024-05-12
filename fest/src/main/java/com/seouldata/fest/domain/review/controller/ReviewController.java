@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,9 +30,12 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<EnvelopResponse> addReview(HttpServletRequest request, @RequestBody @Valid AddReviewReq addReviewReq) {
-
-        reviewService.addReview((Long) request.getAttribute("memSeq"), addReviewReq);
+    public ResponseEntity<EnvelopResponse> addReview(
+            HttpServletRequest request,
+            @RequestPart @Valid AddReviewReq addReviewReq,
+            @RequestPart(value = "imgUrl", required = false) List<MultipartFile> imgUrl
+    ) {
+        reviewService.addReview((Long) request.getAttribute("memSeq"), addReviewReq, imgUrl);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(EnvelopResponse.builder().code(HttpStatus.CREATED.value()).build());

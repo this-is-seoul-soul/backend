@@ -23,7 +23,7 @@ public class AddReviewReq {
     @Max(5)
     private int point;
 
-    private List<String> imgUrl;
+//    private List<String> imgUrl;
 
     private List<Integer> tag;
 

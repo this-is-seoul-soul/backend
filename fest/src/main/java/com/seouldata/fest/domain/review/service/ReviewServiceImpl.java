@@ -23,7 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final FestRepository festRepository;
     private final ImageRepository imageRepository;
     private final TagRepository tagRepository;
+
+    private final AwsService awsService;
 
     private final InfoUtil infoUtil;
 
@@ -85,7 +89,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Long addReview(Long memSeq, AddReviewReq addReviewReq) {
+    public void addReview(Long memSeq, AddReviewReq addReviewReq, List<MultipartFile> images) {
         Fest foundFest = festRepository.findByFestSeq(addReviewReq.getFestSeq())
                 .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
 
@@ -96,11 +100,16 @@ public class ReviewServiceImpl implements ReviewService {
                 .content(addReviewReq.getContent())
                 .build());
 
-        if (addReviewReq.getImgUrl() != null) {
-            addReviewReq.getImgUrl().stream()
-                    .map(image -> Image.builder()
+        if (images != null) {
+            List<String> imageUrl = images.stream()
+                    .map(this::saveReviewImage)
+                    .toList();
+
+            imageUrl.stream()
+                    .filter(url -> !url.isEmpty())
+                    .map(url -> Image.builder()
                             .review(review)
-                            .imgUrl(image)
+                            .imgUrl(url)
                             .build())
                     .forEach(imageRepository::save);
         }
@@ -114,8 +123,6 @@ public class ReviewServiceImpl implements ReviewService {
                             .build())
                     .forEach(tagRepository::save);
         }
-
-        return review.getReviewSeq();
     }
 
     @Override
@@ -230,6 +237,19 @@ public class ReviewServiceImpl implements ReviewService {
                     .mbti(createInfo.getMbti())
                     .build();
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 리뷰 이미지 저장, 저장이 안 되는 경우 리뷰 등록 자체 안 되는 경우 방지
+     * @param image
+     * @return 저장된 이미지 url
+     */
+    private String saveReviewImage(MultipartFile image) {
+        try {
+            return awsService.saveFile(image);
+        } catch (IOException e) {
+            return "";
+        }
     }
 
 }
