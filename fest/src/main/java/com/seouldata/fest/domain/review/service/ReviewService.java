@@ -5,6 +5,7 @@ import com.seouldata.fest.domain.review.dto.request.ModifyReviewReq;
 import com.seouldata.fest.domain.review.dto.response.GetReviewRes;
 import com.seouldata.fest.domain.review.dto.response.GetReviewTotalRes;
 import com.seouldata.fest.domain.review.dto.response.GetTagRes;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface ReviewService {
 
     GetReviewTotalRes findReview(Long memSeq, Long festSeq, int sort, int page, int limit);
 
-    Long addReview(Long memSeq, AddReviewReq addReviewReq);
+    void addReview(Long memSeq, AddReviewReq addReviewReq, List<MultipartFile> images);
 
     void modifyReview(Long memSeq, ModifyReviewReq modifyReviewReq);
 
