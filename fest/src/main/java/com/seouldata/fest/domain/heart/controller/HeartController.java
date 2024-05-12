@@ -24,10 +24,10 @@ public class HeartController {
                 .body(EnvelopResponse.builder().code(HttpStatus.CREATED.value()).build());
     }
 
-    @DeleteMapping("/{heartSeq}")
-    public ResponseEntity<EnvelopResponse> removeHeart(HttpServletRequest request, @PathVariable("heartSeq") Long heartSeq) {
+    @DeleteMapping("/{festSeq}")
+    public ResponseEntity<EnvelopResponse> removeHeart(HttpServletRequest request, @PathVariable("festSeq") Long festSeq) {
 
-        heartService.removeHeart(heartSeq);
+        heartService.removeHeart((Long) request.getAttribute("memSeq"), festSeq);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(EnvelopResponse.builder().code(HttpStatus.OK.value()).build());

@@ -8,7 +8,7 @@ public interface HeartService {
 
     void addHeart(Long memSeq, Long festSeq);
 
-    void removeHeart(Long heartSeq);
+    void removeHeart(Long memSeq, Long festSeq);
 
     List<GetHeartRes> getHeart(Long memSeq);
 
