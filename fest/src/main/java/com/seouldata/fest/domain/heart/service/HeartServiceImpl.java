@@ -34,6 +34,10 @@ public class HeartServiceImpl implements HeartService{
         Fest fest = festRepository.findByFestSeq(festSeq)
                         .orElseThrow(() -> new BusinessException(ErrorCode.FEST_NOT_FOUND));
 
+        if (heartRepository.existsByFestAndAndMemSeq(fest, memSeq)) {
+            throw new BusinessException(ErrorCode.HEART_ALREADY_EXIST);
+        }
+
         heartRepository.save(Heart.builder()
                 .memSeq(memSeq)
                 .fest(fest)
