@@ -34,4 +34,6 @@ public interface AuthService {
 
     GetMemberStatusRes checkStatus(String token, String googleId);
 
+    String modifyProfile(long memberSeq, MultipartFile profile) throws IOException;
+
 }

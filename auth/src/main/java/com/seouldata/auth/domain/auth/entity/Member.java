@@ -76,4 +76,8 @@ public class Member {
         this.badgeSeq = badgeSeq;
     }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }

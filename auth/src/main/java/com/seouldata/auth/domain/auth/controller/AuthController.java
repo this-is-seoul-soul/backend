@@ -175,4 +175,16 @@ public class AuthController {
                 );
     }
 
+    @PatchMapping("/profile")
+    public ResponseEntity<EnvelopResponse> getProfile(
+            @Authorization Long memSeq,
+            @RequestPart(value = "profile") MultipartFile profile
+    ) throws IOException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EnvelopResponse.builder()
+                        .data(authService.modifyProfile(memSeq, profile))
+                        .build()
+                );
+    }
+
 }

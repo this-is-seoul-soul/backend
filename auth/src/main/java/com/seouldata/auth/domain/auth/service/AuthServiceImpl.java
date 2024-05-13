@@ -14,6 +14,7 @@ import com.seouldata.common.exception.BusinessException;
 import com.seouldata.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +31,9 @@ public class AuthServiceImpl implements AuthService {
     private final GoogleService googleService;
 
     private final JwtProvider jwtProvider;
+
+    @Value("${image.default.url}")
+    private String defaultProfileUrl;
 
     @Override
     public JoinMemberRes join(JoinMemberReq joinMemberReq, MultipartFile profile) throws IOException {
@@ -72,6 +76,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElse(Member.builder()
                         .googleId(googleUser.getId())
                         .email(googleUser.getEmail())
+                        .image(defaultProfileUrl)
                         .notification(false)
                         .build());
 
@@ -159,6 +164,19 @@ public class AuthServiceImpl implements AuthService {
                 .orElse(GetMemberStatusRes.builder()
                         .status(MemberStatus.INIT.getLabel())
                         .build());
+    }
+
+    @Override
+    public String modifyProfile(long memberSeq, MultipartFile profile) throws IOException {
+        Member member = authRepository.findById(memberSeq)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        String imageUrl = saveProfileImage(profile);
+        member.setImage(imageUrl);
+
+        authRepository.save(member);
+
+        return imageUrl;
     }
 
     @Override
