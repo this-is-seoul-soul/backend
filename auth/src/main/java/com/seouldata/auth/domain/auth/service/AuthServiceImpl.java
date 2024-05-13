@@ -167,6 +167,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public String modifyProfile(long memberSeq, MultipartFile profile) throws IOException {
+        Member member = authRepository.findById(memberSeq)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        String imageUrl = saveProfileImage(profile);
+        member.setImage(imageUrl);
+
+        authRepository.save(member);
+
+        return imageUrl;
+    }
+
+    @Override
     public GetNewAccessTokenRes generateNewToken(String token) {
         return GetNewAccessTokenRes.builder()
                 .accessToken(jwtProvider.reIssue(token))
