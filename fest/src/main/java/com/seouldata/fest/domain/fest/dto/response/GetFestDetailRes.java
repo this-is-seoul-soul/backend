@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -29,9 +28,9 @@ public class GetFestDetailRes {
 
     private String useFee;
 
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     private double lot;
 
