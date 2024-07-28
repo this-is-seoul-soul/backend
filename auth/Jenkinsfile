@@ -39,8 +39,7 @@ pipeline {
     stage("Docker up") {
       steps {
         echo "Docker compose up"
-        sh "docker stop auth_module"
-        sh "docker rm auth_module"
+        sh "docker rm -f auth_module"
         sh "docker-compose -f ./auth/docker-compose.yml up -d"
       }
     }
