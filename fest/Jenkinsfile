@@ -39,8 +39,7 @@ pipeline {
     stage("Docker up") {
       steps {
         echo "Docker compose up"
-        sh "docker stop fest_module"
-        sh "docker rm fest_module"
+        sh "docker rm -f fest_module"
         sh "docker-compose -f ./fest/docker-compose.yml up -d"
       }
     }
